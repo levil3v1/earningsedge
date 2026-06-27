@@ -56,8 +56,7 @@ export default async function handler(req, res) {
       max_tokens: 8000,
       system: SYSTEM_PROMPT,
       messages,
-      // PDF beta header is required when passing document blocks
-      betas: ["pdfs-2024-09-25"],
+    
     });
 
     const raw = response.content
