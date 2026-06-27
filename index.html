@@ -228,19 +228,8 @@
     <div class="paywall-secure">🔒 Secure payment via Stripe</div>
   </div>
 
-  <!-- LOGGED OUT WALL -->
-  <div id="logged-out-wall" style="display:none; text-align:center; padding: 80px 20px;">
-    <div style="font-size:36px; margin-bottom:20px;">📊</div>
-    <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; margin-bottom:12px;">Institutional earnings analysis, powered by AI.</div>
-    <div style="font-size:13px; color:var(--ink3); max-width:420px; margin:0 auto 32px; line-height:1.7;">Create a free account to get started. You'll get 3 analyses included — no credit card required.</div>
-    <div style="display:flex; gap:12px; justify-content:center;">
-      <button class="btn-primary" onclick="openAuth('signup')">Create Free Account</button>
-      <button class="btn-secondary" onclick="openAuth('login')">Log In</button>
-    </div>
-  </div>
-
   <!-- PHASE 1 -->
-  <div id="phase1" style="display:none">
+  <div id="phase1">
     <div class="sec-header">
       <div class="sec-label">Step 01</div>
       <div class="sec-title">Add your earnings call</div>
@@ -400,9 +389,6 @@ async function setSession(session) {
   document.getElementById('header-auth-btn').style.display = 'none';
   document.getElementById('header-signup-btn').style.display = 'none';
   document.getElementById('header-logout-btn').style.display = 'block';
-  document.getElementById('logged-out-wall').style.display = 'none';
-  document.getElementById('phase1').style.display = 'block';
-  document.getElementById('stepbar').style.display = 'flex';
   await refreshProfile();
 }
 
@@ -440,12 +426,6 @@ function clearSession() {
   document.getElementById('header-logout-btn').style.display = 'none';
   document.getElementById('credits-bar').style.display = 'none';
   document.getElementById('paywall').classList.remove('show');
-  document.getElementById('logged-out-wall').style.display = 'block';
-  document.getElementById('phase1').style.display = 'none';
-  document.getElementById('phase2').style.display = 'none';
-  document.getElementById('phase3').classList.remove('show');
-  document.getElementById('phase4').classList.remove('show');
-  document.getElementById('stepbar').style.display = 'none';
 }
 
 async function logout() {
