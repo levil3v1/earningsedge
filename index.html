@@ -150,7 +150,7 @@
 
   <!-- USAGE BAR -->
   <div class="usage-bar" id="usage-bar">
-    <div class="usage-left"><strong id="usage-count">10</strong> analyses remaining<span id="usage-period">this window</span></div>
+    <div class="usage-left"><strong id="usage-count">3</strong> analyses remaining<span id="usage-period">this window</span></div>
     <div class="usage-track"><div class="usage-fill" id="usage-fill" style="width:100%"></div></div>
     <div class="usage-reset" id="usage-reset">Resets in —</div>
   </div>
@@ -158,8 +158,8 @@
   <!-- RATE LIMIT WALL -->
   <div class="rate-wall" id="rate-wall">
     <div class="rate-wall-icon">⏱</div>
-    <div class="rate-wall-title">You've used all 10 analyses</div>
-    <div class="rate-wall-sub">EarningsEdge allows 10 analyses every 10 minutes to keep the service running smoothly.<br>Your limit resets automatically — no action needed.</div>
+    <div class="rate-wall-title">You've used all 3 analyses</div>
+    <div class="rate-wall-sub">EarningsEdge allows 3 analyses every 10 minutes to keep the service running smoothly.<br>Your limit resets automatically — no action needed.</div>
     <div class="rate-wall-timer" id="rate-wall-timer">—:——</div>
     <div class="rate-wall-timer-label">until your analyses refresh</div>
   </div>
@@ -272,7 +272,7 @@
 
 <script>
 var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
-var LIMIT = 10, resetInterval = null;
+var LIMIT = 3, resetInterval = null;
 
 function updateUsageBar(remaining, resetsAt) {
   if (remaining === undefined) return;
