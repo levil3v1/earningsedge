@@ -24,9 +24,21 @@ export default async function handler(req, res) {
   if (now - entry.start > windowMs) { entry.count = 0; entry.start = now; }
   entry.count++;
   RATE_LIMIT.set(ip, entry);
+  const remaining = Math.max(0, limit - entry.count);
+  const resetsAt = entry.start + windowMs;
+
   if (entry.count > limit) {
-    return res.status(429).json({ error: "Too many requests. Please wait a few minutes." });
+    return res.status(429).json({
+      rateLimited: true,
+      error: "Rate limit reached",
+      remaining: 0,
+      resetsAt
+    });
   }
+
+  // Attach rate limit info to every successful response too
+  res.setHeader("X-RateLimit-Remaining", remaining);
+  res.setHeader("X-RateLimit-Reset", resetsAt);
 
   // CORS headers (tighten the origin in production to your actual domain)
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -44,7 +56,8 @@ export default async function handler(req, res) {
       max_tokens: 8000,
       system: SYSTEM_PROMPT,
       messages,
-
+      // PDF beta header is required when passing document blocks
+      betas: ["pdfs-2024-09-25"],
     });
 
     const raw = response.content
@@ -58,7 +71,7 @@ export default async function handler(req, res) {
 
     // Validate it's real JSON before sending back
     const parsed = JSON.parse(raw);
-    return res.status(200).json({ result: parsed });
+    return res.status(200).json({ result: parsed, remaining, resetsAt });
 
   } catch (err) {
     console.error("Anthropic error:", err);
