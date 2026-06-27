@@ -26,17 +26,26 @@
   .header-user { font-size: 11px; color: #aaa; }
   .header-btn { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 6px 14px; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
   .header-btn-ghost { background: transparent; color: #c9a84c; border: 1px solid #c9a84c44; }
-  .header-btn-ghost:hover { border-color: #c9a84c; }
   .header-btn-solid { background: #c9a84c; color: #000; }
   .header-btn-solid:hover { background: #b8963e; }
 
   .main { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
+
+  /* AUTH WALL */
+  .auth-wall { display: none; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
+  .auth-wall.show { display: flex; }
+  .auth-wall-icon { font-size: 40px; margin-bottom: 20px; }
+  .auth-wall-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.2; }
+  .auth-wall-sub { font-size: 14px; color: var(--ink3); max-width: 420px; margin: 0 auto 36px; line-height: 1.7; }
+  .auth-wall-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
+  .auth-wall-note { font-size: 11px; color: var(--muted); }
 
   /* AUTH MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
   .modal-overlay.show { display: flex; }
   .modal { background: var(--paper); max-width: 440px; width: calc(100% - 40px); padding: 40px; position: relative; }
   .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+  .modal-close:hover { color: var(--ink); }
   .modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
   .modal-sub { font-size: 12px; color: var(--ink3); margin-bottom: 28px; }
   .modal-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
@@ -46,7 +55,6 @@
   .modal-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 13px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 8px; }
   .modal-btn:hover { background: var(--ink2); }
   .modal-btn:disabled { background: var(--muted); cursor: not-allowed; }
-
   .modal-switch { text-align: center; margin-top: 20px; font-size: 12px; color: var(--ink3); }
   .modal-switch a { color: var(--gold); cursor: pointer; text-decoration: underline; }
   .modal-err { background: var(--red-bg); border-left: 3px solid var(--red); padding: 10px 14px; font-size: 12px; color: var(--red); margin-top: 12px; display: none; }
@@ -58,9 +66,9 @@
   .paywall { display: none; background: var(--paper); border: 1px solid var(--rule); padding: 48px 32px; text-align: center; margin-bottom: 28px; }
   .paywall.show { display: block; }
   .paywall-icon { font-size: 36px; margin-bottom: 16px; }
-  .paywall-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .paywall-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
   .paywall-sub { font-size: 13px; color: var(--ink3); line-height: 1.7; margin-bottom: 28px; max-width: 440px; margin-left: auto; margin-right: auto; }
-  .paywall-price { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+  .paywall-price { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
   .paywall-price-sub { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 28px; }
   .paywall-features { list-style: none; display: flex; flex-direction: column; gap: 10px; max-width: 280px; margin: 0 auto 32px; text-align: left; }
   .paywall-features li { font-size: 13px; color: var(--ink2); display: flex; align-items: center; gap: 10px; }
@@ -186,150 +194,166 @@
   </div>
   <div class="header-right">
     <span class="header-user" id="header-email"></span>
-    <button class="header-btn header-btn-ghost" id="header-auth-btn" onclick="openAuth('login')">Log In</button>
-    <button class="header-btn header-btn-solid" id="header-signup-btn" onclick="openAuth('signup')">Sign Up Free</button>
     <button class="header-btn header-btn-ghost" id="header-logout-btn" onclick="logout()" style="display:none">Log Out</button>
   </div>
 </div>
 
 <div class="main">
-  <div class="stepbar">
-    <div class="sb-item active" id="step1"><div class="sb-num">1</div><span>Input</span></div>
-    <div class="sb-line"></div>
-    <div class="sb-item" id="step2"><div class="sb-num">2</div><span>Briefing</span></div>
-    <div class="sb-line"></div>
-    <div class="sb-item" id="step3"><div class="sb-num">3</div><span>Analysis</span></div>
-    <div class="sb-line"></div>
-    <div class="sb-item" id="step4"><div class="sb-num">4</div><span>Report</span></div>
-  </div>
 
-  <!-- CREDITS BAR -->
-  <div class="credits-bar" id="credits-bar" style="display:none">
-    <div class="credits-left"><strong id="credits-count">0</strong> analyses remaining</div>
-    <div class="credits-track"><div class="credits-fill" id="credits-fill" style="width:0%"></div></div>
-    <button class="credits-buy" onclick="showPaywall()">Buy 20 more — $9.99</button>
-  </div>
-
-  <!-- PAYWALL -->
-  <div class="paywall" id="paywall">
-    <div class="paywall-icon">📊</div>
-    <div class="paywall-title">You've used all your analyses</div>
-    <div class="paywall-sub">Top up your account to keep going. Every credit is one full institutional-grade earnings call report.</div>
-    <div class="paywall-price">$9.99</div>
-    <div class="paywall-price-sub">One-time · 20 analyses</div>
-    <ul class="paywall-features">
-      <li>20 full analysis credits</li>
-      <li>PDF &amp; audio transcripts</li>
-      <li>Bull / bear case breakdown</li>
-      <li>Management tone scoring</li>
-      <li>Credits never expire</li>
-    </ul>
-    <button class="paywall-btn" id="checkout-btn" onclick="startCheckout()">Buy 20 Analyses — $9.99</button>
-    <div class="paywall-secure">🔒 Secure payment via Stripe</div>
-  </div>
-
-  <!-- PHASE 1 -->
-  <div id="phase1">
-    <div class="sec-header">
-      <div class="sec-label">Step 01</div>
-      <div class="sec-title">Add your earnings call</div>
-      <div class="sec-sub">Upload an audio recording, paste a transcript, or drop in a PDF.</div>
+  <!-- AUTH WALL -->
+  <div class="auth-wall show" id="auth-wall">
+    <div class="auth-wall-icon">📊</div>
+    <div class="auth-wall-title">Institutional earnings analysis, powered by AI.</div>
+    <div class="auth-wall-sub">EarningsEdge reads between the lines of any earnings call — from tone to executive statements — so you always know what's really being said.</div>
+    <div class="auth-wall-btns">
+      <button class="btn-primary" onclick="openAuth('signup')">Create Free Account</button>
+      <button class="btn-secondary" onclick="openAuth('login')">Log In</button>
     </div>
-    <hr class="rule">
-    <div class="tabs">
-      <button class="tab active" id="tab-audio" onclick="switchTab('audio')">Audio File</button>
-      <button class="tab" id="tab-text" onclick="switchTab('text')">Paste Transcript</button>
-      <button class="tab" id="tab-pdf" onclick="switchTab('pdf')">PDF Upload</button>
+    <div class="auth-wall-note">3 free analyses included. No credit card required.</div>
+  </div>
+
+  <!-- APP (hidden until logged in) -->
+  <div id="app" style="display:none">
+
+    <div class="stepbar" id="stepbar">
+      <div class="sb-item active" id="step1"><div class="sb-num">1</div><span>Input</span></div>
+      <div class="sb-line"></div>
+      <div class="sb-item" id="step2"><div class="sb-num">2</div><span>Briefing</span></div>
+      <div class="sb-line"></div>
+      <div class="sb-item" id="step3"><div class="sb-num">3</div><span>Analysis</span></div>
+      <div class="sb-line"></div>
+      <div class="sb-item" id="step4"><div class="sb-num">4</div><span>Report</span></div>
     </div>
-    <div id="panel-audio">
-      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-        <div class="drop-icon">▶</div>
-        <div class="drop-label">Drop audio file or click to browse</div>
-        <div class="drop-hint">MP3 · WAV · M4A · OGG — up to 50MB</div>
+
+    <!-- CREDITS BAR -->
+    <div class="credits-bar" id="credits-bar" style="display:none">
+      <div class="credits-left"><strong id="credits-count">0</strong> analyses remaining</div>
+      <div class="credits-track"><div class="credits-fill" id="credits-fill" style="width:0%"></div></div>
+      <button class="credits-buy" onclick="showPaywall()">Buy 20 more — $9.99</button>
+    </div>
+
+    <!-- PAYWALL -->
+    <div class="paywall" id="paywall">
+      <div class="paywall-icon">📊</div>
+      <div class="paywall-title">You've used all your analyses</div>
+      <div class="paywall-sub">Top up your account to keep going. Every credit is one full institutional-grade earnings call report.</div>
+      <div class="paywall-price">$9.99</div>
+      <div class="paywall-price-sub">One-time · 20 analyses</div>
+      <ul class="paywall-features">
+        <li>20 full analysis credits</li>
+        <li>PDF &amp; audio transcripts</li>
+        <li>Bull / bear case breakdown</li>
+        <li>Management tone scoring</li>
+        <li>Credits never expire</li>
+      </ul>
+      <button class="paywall-btn" id="checkout-btn" onclick="startCheckout()">Buy 20 Analyses — $9.99</button>
+      <div class="paywall-secure">🔒 Secure payment via Stripe</div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div id="phase1">
+      <div class="sec-header">
+        <div class="sec-label">Step 01</div>
+        <div class="sec-title">Add your earnings call</div>
+        <div class="sec-sub">Upload an audio recording, paste a transcript, or drop in a PDF.</div>
       </div>
-      <input type="file" id="file-input" accept="audio/*" onchange="handleAudio(this)">
-    </div>
-    <div id="panel-text" style="display:none">
-      <textarea id="transcript-input" placeholder="Paste the full earnings call transcript here…"></textarea>
-    </div>
-    <div id="panel-pdf" style="display:none">
-      <div class="drop-zone" id="pdf-drop-zone" onclick="document.getElementById('pdf-input').click()">
-        <div class="drop-icon">⬆</div>
-        <div class="drop-label">Drop PDF transcript or click to browse</div>
-        <div class="drop-hint">Seeking Alpha · IR site exports · Investor PDFs</div>
+      <hr class="rule">
+      <div class="tabs">
+        <button class="tab active" id="tab-audio" onclick="switchTab('audio')">Audio File</button>
+        <button class="tab" id="tab-text" onclick="switchTab('text')">Paste Transcript</button>
+        <button class="tab" id="tab-pdf" onclick="switchTab('pdf')">PDF Upload</button>
       </div>
-      <input type="file" id="pdf-input" accept="application/pdf" onchange="handlePDF(this)">
-    </div>
-    <div class="err" id="input-error">Please provide an audio file, transcript, or PDF to continue.</div>
-    <div class="btn-row" style="justify-content:flex-end; margin-top:28px;">
-      <button class="btn-primary" onclick="goToBriefing()">Continue to Briefing →</button>
-    </div>
-  </div>
-
-  <!-- PHASE 2 -->
-  <div id="phase2" style="display:none">
-    <div class="sec-header">
-      <div class="sec-label">Step 02</div>
-      <div class="sec-title">Analyst briefing</div>
-      <div class="sec-sub">Define your focus before the analysis runs.</div>
-    </div>
-    <hr class="rule">
-    <div class="field-grid">
-      <div class="field"><div class="field-label">Company name</div><input class="field-input" id="q-company" type="text" placeholder="e.g. Rolls-Royce Holdings plc"></div>
-      <div class="field"><div class="field-label">Ticker symbol</div><input class="field-input" id="q-ticker" type="text" placeholder="e.g. RYCEY"></div>
-      <div class="field"><div class="field-label">Reporting period</div><input class="field-input" id="q-quarter" type="text" placeholder="e.g. FY2025 / Q2 2025"></div>
-      <div class="field"><div class="field-label">Investor stance</div>
-        <select class="field-input" id="q-stance">
-          <option value="">Select position…</option>
-          <option>Long — looking for conviction</option>
-          <option>Short — looking for weaknesses</option>
-          <option>Neutral — researching</option>
-          <option>Considering a position</option>
-        </select>
+      <div id="panel-audio">
+        <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+          <div class="drop-icon">▶</div>
+          <div class="drop-label">Drop audio file or click to browse</div>
+          <div class="drop-hint">MP3 · WAV · M4A · OGG — up to 50MB</div>
+        </div>
+        <input type="file" id="file-input" accept="audio/*" onchange="handleAudio(this)">
       </div>
-      <div class="field field-full"><div class="field-label">Market expectations</div><input class="field-input" id="q-expectations" type="text" placeholder="e.g. EPS of £0.18, revenue growth of 12%…"></div>
-      <div class="field field-full"><div class="field-label">Key themes to focus on</div><input class="field-input" id="q-themes" type="text" placeholder="e.g. Backlog growth, free cash flow…"></div>
-      <div class="field field-full"><div class="field-label">Executives or statements to watch</div><input class="field-input" id="q-executives" type="text" placeholder="e.g. CEO tone on capital allocation…"></div>
-    </div>
-    <hr class="rule">
-    <div class="btn-row">
-      <button class="btn-secondary" onclick="goBack()">← Back</button>
-      <button class="btn-primary" id="run-btn" onclick="runAnalysis()">Run Analysis →</button>
-    </div>
-    <div class="err" id="api-error"></div>
-  </div>
-
-  <!-- PHASE 3 -->
-  <div id="phase3" class="loading">
-    <div class="loading-label">Processing</div>
-    <div class="loading-title">Analyzing your earnings call…</div>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-    <div class="loading-steps">
-      <div class="l-step" id="ls1"><div class="l-marker"></div>Processing content</div>
-      <div class="l-step" id="ls2"><div class="l-marker"></div>Tone &amp; sentiment analysis</div>
-      <div class="l-step" id="ls3"><div class="l-marker"></div>Extracting key findings with quotes</div>
-      <div class="l-step" id="ls4"><div class="l-marker"></div>Building bull / bear case</div>
-      <div class="l-step" id="ls5"><div class="l-marker"></div>Compiling institutional report</div>
-    </div>
-  </div>
-
-  <!-- PHASE 4 -->
-  <div id="phase4" class="report">
-    <div class="report-masthead">
-      <div class="report-eyebrow">EarningsEdge — Institutional Analysis Report</div>
-      <div class="report-company" id="r-company">—</div>
-      <div class="report-meta-row">
-        <div class="report-meta-item"><strong id="r-ticker">—</strong></div>
-        <div class="meta-sep">·</div>
-        <div class="report-meta-item">Period: <strong id="r-quarter">—</strong></div>
+      <div id="panel-text" style="display:none">
+        <textarea id="transcript-input" placeholder="Paste the full earnings call transcript here…"></textarea>
+      </div>
+      <div id="panel-pdf" style="display:none">
+        <div class="drop-zone" id="pdf-drop-zone" onclick="document.getElementById('pdf-input').click()">
+          <div class="drop-icon">⬆</div>
+          <div class="drop-label">Drop PDF transcript or click to browse</div>
+          <div class="drop-hint">Seeking Alpha · IR site exports · Investor PDFs</div>
+        </div>
+        <input type="file" id="pdf-input" accept="application/pdf" onchange="handlePDF(this)">
+      </div>
+      <div class="err" id="input-error">Please provide an audio file, transcript, or PDF to continue.</div>
+      <div class="btn-row" style="justify-content:flex-end; margin-top:28px;">
+        <button class="btn-primary" onclick="goToBriefing()">Continue to Briefing →</button>
       </div>
     </div>
-    <div class="score-grid" id="r-scores"></div>
-    <div id="r-sections"></div>
-    <div class="btn-row">
-      <button class="btn-secondary" onclick="newAnalysis()">← New Analysis</button>
+
+    <!-- PHASE 2 -->
+    <div id="phase2" style="display:none">
+      <div class="sec-header">
+        <div class="sec-label">Step 02</div>
+        <div class="sec-title">Analyst briefing</div>
+        <div class="sec-sub">Define your focus before the analysis runs.</div>
+      </div>
+      <hr class="rule">
+      <div class="field-grid">
+        <div class="field"><div class="field-label">Company name</div><input class="field-input" id="q-company" type="text" placeholder="e.g. Rolls-Royce Holdings plc"></div>
+        <div class="field"><div class="field-label">Ticker symbol</div><input class="field-input" id="q-ticker" type="text" placeholder="e.g. RYCEY"></div>
+        <div class="field"><div class="field-label">Reporting period</div><input class="field-input" id="q-quarter" type="text" placeholder="e.g. FY2025 / Q2 2025"></div>
+        <div class="field"><div class="field-label">Investor stance</div>
+          <select class="field-input" id="q-stance">
+            <option value="">Select position…</option>
+            <option>Long — looking for conviction</option>
+            <option>Short — looking for weaknesses</option>
+            <option>Neutral — researching</option>
+            <option>Considering a position</option>
+          </select>
+        </div>
+        <div class="field field-full"><div class="field-label">Market expectations</div><input class="field-input" id="q-expectations" type="text" placeholder="e.g. EPS of £0.18, revenue growth of 12%…"></div>
+        <div class="field field-full"><div class="field-label">Key themes to focus on</div><input class="field-input" id="q-themes" type="text" placeholder="e.g. Backlog growth, free cash flow…"></div>
+        <div class="field field-full"><div class="field-label">Executives or statements to watch</div><input class="field-input" id="q-executives" type="text" placeholder="e.g. CEO tone on capital allocation…"></div>
+      </div>
+      <hr class="rule">
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goBack()">← Back</button>
+        <button class="btn-primary" id="run-btn" onclick="runAnalysis()">Run Analysis →</button>
+      </div>
+      <div class="err" id="api-error"></div>
     </div>
-  </div>
+
+    <!-- PHASE 3 -->
+    <div id="phase3" class="loading">
+      <div class="loading-label">Processing</div>
+      <div class="loading-title">Analyzing your earnings call…</div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="loading-steps">
+        <div class="l-step" id="ls1"><div class="l-marker"></div>Processing content</div>
+        <div class="l-step" id="ls2"><div class="l-marker"></div>Tone &amp; sentiment analysis</div>
+        <div class="l-step" id="ls3"><div class="l-marker"></div>Extracting key findings with quotes</div>
+        <div class="l-step" id="ls4"><div class="l-marker"></div>Building bull / bear case</div>
+        <div class="l-step" id="ls5"><div class="l-marker"></div>Compiling institutional report</div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div id="phase4" class="report">
+      <div class="report-masthead">
+        <div class="report-eyebrow">EarningsEdge — Institutional Analysis Report</div>
+        <div class="report-company" id="r-company">—</div>
+        <div class="report-meta-row">
+          <div class="report-meta-item"><strong id="r-ticker">—</strong></div>
+          <div class="meta-sep">·</div>
+          <div class="report-meta-item">Period: <strong id="r-quarter">—</strong></div>
+        </div>
+      </div>
+      <div class="score-grid" id="r-scores"></div>
+      <div id="r-sections"></div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="newAnalysis()">← New Analysis</button>
+      </div>
+    </div>
+
+  </div><!-- /app -->
 </div>
 
 <!-- AUTH MODAL -->
@@ -342,12 +366,11 @@
       <div class="modal-label">Email</div>
       <input class="modal-input" id="auth-email" type="email" placeholder="you@example.com">
     </div>
-    <div class="modal-field" id="auth-pass-field">
+    <div class="modal-field">
       <div class="modal-label">Password</div>
       <input class="modal-input" id="auth-password" type="password" placeholder="••••••••">
     </div>
     <button class="modal-btn" id="auth-submit-btn" onclick="submitAuth()">Log In</button>
-
     <div class="modal-err" id="auth-err"></div>
     <div class="modal-ok" id="auth-ok"></div>
     <div class="modal-switch" id="auth-switch">Don't have an account? <a onclick="openAuth('signup')">Sign up free</a></div>
@@ -355,25 +378,25 @@
 </div>
 
 <script>
-// ── Supabase init ──────────────────────────────────────────────────────────
-const SUPABASE_URL = 'SUPABASE_URL_HERE';
-const SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY_HERE';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var SUPABASE_URL = 'https://rdvguldkjjjmxphpxoov.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkdmd1bGRrampqbXhwaHB4b292Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODQ2NTIsImV4cCI6MjA5ODE2MDY1Mn0.-EeCJ2pYYNtuKDJ0KraPVjyCFeptWj7h5jGL7hhrQNE';
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 var currentSession = null, currentCredits = 0, inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
 
-// ── On load ────────────────────────────────────────────────────────────────
 window.addEventListener('load', async function() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) await setSession(session);
-
+  var result = await sb.auth.getSession();
+  if (result.data.session) {
+    await setSession(result.data.session);
+  } else {
+    showWall();
+  }
   sb.auth.onAuthStateChange(async function(event, session) {
-    if (session) await setSession(session);
-    else clearSession();
+    if (event === 'SIGNED_IN' && session) await setSession(session);
+    if (event === 'SIGNED_OUT') showWall();
   });
 
-  // Handle payment return
-  const params = new URLSearchParams(window.location.search);
+  var params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
     setTimeout(async function() {
       await refreshProfile();
@@ -383,23 +406,32 @@ window.addEventListener('load', async function() {
   }
 });
 
+function showWall() {
+  currentSession = null;
+  document.getElementById('auth-wall').classList.add('show');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('header-email').textContent = '';
+  document.getElementById('header-logout-btn').style.display = 'none';
+}
+
 async function setSession(session) {
   currentSession = session;
+  document.getElementById('auth-wall').classList.remove('show');
+  document.getElementById('app').style.display = 'block';
   document.getElementById('header-email').textContent = session.user.email;
-  document.getElementById('header-auth-btn').style.display = 'none';
-  document.getElementById('header-signup-btn').style.display = 'none';
   document.getElementById('header-logout-btn').style.display = 'block';
+  closeAuth();
   await refreshProfile();
 }
 
 async function refreshProfile() {
   if (!currentSession) return;
-  const res = await fetch('/api/auth', {
+  var res = await fetch('/api/auth', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
     body: JSON.stringify({ action: 'profile' })
   });
-  const data = await res.json();
+  var data = await res.json();
   if (data.profile) updateCreditsBar(data.profile.credits);
 }
 
@@ -414,28 +446,18 @@ function updateCreditsBar(credits) {
   var pct = Math.min(100, (credits / 20) * 100);
   fill.style.width = pct + '%';
   fill.className = 'credits-fill' + (credits <= 1 ? ' low' : credits <= 5 ? ' warn' : '');
-  if (credits <= 0) { paywall.classList.add('show'); }
-  else { paywall.classList.remove('show'); }
-}
-
-function clearSession() {
-  currentSession = null;
-  document.getElementById('header-email').textContent = '';
-  document.getElementById('header-auth-btn').style.display = 'block';
-  document.getElementById('header-signup-btn').style.display = 'block';
-  document.getElementById('header-logout-btn').style.display = 'none';
-  document.getElementById('credits-bar').style.display = 'none';
-  document.getElementById('paywall').classList.remove('show');
+  if (credits <= 0) paywall.classList.add('show');
+  else paywall.classList.remove('show');
 }
 
 async function logout() {
   await sb.auth.signOut();
-  clearSession();
+  showWall();
 }
 
 function showPaywall() { document.getElementById('paywall').classList.add('show'); }
 
-// ── Auth modal ─────────────────────────────────────────────────────────────
+// AUTH MODAL
 var authMode = 'login';
 function openAuth(mode) {
   authMode = mode;
@@ -448,7 +470,10 @@ function openAuth(mode) {
     : 'Already have an account? <a onclick="openAuth(\'login\')">Log in</a>';
   document.getElementById('auth-err').classList.remove('show');
   document.getElementById('auth-ok').classList.remove('show');
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
 }
+
 function closeAuth() { document.getElementById('auth-modal').classList.remove('show'); }
 document.getElementById('auth-modal').addEventListener('click', function(e) { if (e.target === this) closeAuth(); });
 
@@ -463,14 +488,14 @@ async function submitAuth() {
   btn.disabled = true; btn.textContent = authMode === 'login' ? 'Logging in…' : 'Creating account…';
   try {
     if (authMode === 'signup') {
-      const { error } = await sb.auth.signUp({ email, password });
-      if (error) throw error;
+      var res = await sb.auth.signUp({ email: email, password: password });
+      if (res.error) throw res.error;
       okEl.textContent = 'Account created! Check your email to confirm, then log in.';
       okEl.classList.add('show');
     } else {
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      closeAuth();
+      var res = await sb.auth.signInWithPassword({ email: email, password: password });
+      if (res.error) throw res.error;
+      // setSession called via onAuthStateChange
     }
   } catch(e) {
     errEl.textContent = e.message; errEl.classList.add('show');
@@ -478,15 +503,7 @@ async function submitAuth() {
   btn.disabled = false; btn.textContent = authMode === 'login' ? 'Log In' : 'Create Account';
 }
 
-async function googleAuth() {
-  const { data, error } = await sb.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: window.location.origin }
-  });
-  if (error) { document.getElementById('auth-err').textContent = error.message; document.getElementById('auth-err').classList.add('show'); }
-}
-
-// ── Checkout ───────────────────────────────────────────────────────────────
+// CHECKOUT
 async function startCheckout() {
   if (!currentSession) { openAuth('login'); return; }
   var btn = document.getElementById('checkout-btn');
@@ -505,7 +522,7 @@ async function startCheckout() {
   }
 }
 
-// ── App logic ──────────────────────────────────────────────────────────────
+// APP
 function switchTab(m) {
   inputMode = m;
   ['audio','text','pdf'].forEach(function(t) {
@@ -548,7 +565,6 @@ function handlePDF(inp) {
 });
 
 function goToBriefing() {
-  if (!currentSession) { openAuth('signup'); return; }
   if (currentCredits <= 0) { showPaywall(); return; }
   var err = document.getElementById('input-error');
   var t = document.getElementById('transcript-input').value.trim();
@@ -584,9 +600,7 @@ function setLoadingStep(si) {
 }
 
 async function runAnalysis() {
-  if (!currentSession) { openAuth('login'); return; }
   if (currentCredits <= 0) { showPaywall(); return; }
-
   var btn=document.getElementById('run-btn'), apiErr=document.getElementById('api-error');
   apiErr.classList.remove('show');
   var company=document.getElementById('q-company').value.trim()||'Unknown Company';
@@ -597,17 +611,14 @@ async function runAnalysis() {
   var executives=document.getElementById('q-executives').value.trim()||'Not specified';
   var stance=document.getElementById('q-stance').value||'Not specified';
   var transcript=document.getElementById('transcript-input').value.trim();
-
   btn.disabled=true; btn.textContent='Running…';
   document.getElementById('phase2').style.display='none';
   document.getElementById('phase3').classList.add('show');
   setStep(3);
   var si=0; setLoadingStep(si);
   var stepInt=setInterval(function(){si++;setLoadingStep(si);if(si>=4)clearInterval(stepInt);},2200);
-
   var ctx='ANALYST BRIEFING:\nCompany: '+company+' ('+ticker+')\nPeriod: '+quarter+'\nMarket expectations: '+expectations+'\nKey themes: '+themes+'\nExecutives to watch: '+executives+'\nInvestor stance: '+stance;
   var schema='Return this exact JSON:\n{"company":string,"ticker":string,"quarter":string,"overall_sentiment_score":integer 0-100,"confidence_score":integer 0-100,"credibility_score":integer 0-100,"caution_score":integer 0-100,"key_findings":string,"tone_analysis":string,"credibility_assessment":string,"buzzwords_and_hedging":string,"risk_flags":string,"custom_focus":string,"bull_points":array of 4 strings,"bear_points":array of 4 strings,"analyst_verdict":string,"sentiment_tags":array of 5 strings}';
-
   var messages;
   if (inputMode==='pdf' && uploadedPDFBase64) {
     messages=[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:uploadedPDFBase64}},{type:'text',text:ctx+'\n\n'+schema+'\n\nAnalyze the earnings call in the attached PDF.'}]}];
@@ -615,12 +626,11 @@ async function runAnalysis() {
     var callContent=inputMode==='text'?transcript:'[Audio: '+(uploadedFile?uploadedFile.name:'unknown')+'. Generate a realistic detailed institutional-grade analysis for '+company+' ('+ticker+') '+quarter+'.]';
     messages=[{role:'user',content:ctx+'\n\n'+schema+'\n\nEARNINGS CALL:\n'+callContent.slice(0,9000)}];
   }
-
   try {
     var res = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
-      body: JSON.stringify({ messages })
+      body: JSON.stringify({ messages: messages })
     });
     clearInterval(stepInt);
     var data = await res.json();
