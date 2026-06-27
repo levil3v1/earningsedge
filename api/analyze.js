@@ -15,11 +15,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // Basic rate limit: 10 requests per IP per 10 minutes
+  // Basic rate limit: 3 requests per IP per 10 minutes
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown";
   const now = Date.now();
   const windowMs = 10 * 60 * 1000;
-  const limit = 10;
+  const limit = 3;
   const entry = RATE_LIMIT.get(ip) || { count: 0, start: now };
   if (now - entry.start > windowMs) { entry.count = 0; entry.start = now; }
   entry.count++;
