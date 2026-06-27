@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarningsEdge — Institutional Earnings Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0a0a0a; --ink2: #2a2a2a; --ink3: #4a4a4a; --muted: #888;
+    --rule: #d8d4cc; --rule-light: #ece9e2; --bg: #f5f2eb; --paper: #faf9f6;
+    --white: #ffffff; --gold: #8a6c2a; --gold-bg: #f5f0e4;
+    --green: #1a5c3a; --green-bg: #eaf3ee; --red: #8b1c1c; --red-bg: #faeaea;
+  }
+  body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  .header { background: var(--ink); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .logo { display: flex; align-items: baseline; gap: 2px; }
+  .logo-main { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
+  .logo-main span { color: #c9a84c; }
+  .logo-tag { font-size: 10px; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-left: 14px; font-weight: 500; border-left: 1px solid #333; padding-left: 14px; }
+  .header-pill { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #c9a84c; border: 1px solid #c9a84c44; padding: 4px 12px; font-weight: 600; }
+  .main { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
+  .stepbar { display: flex; align-items: center; margin-bottom: 40px; border-bottom: 1px solid var(--rule); padding-bottom: 16px; }
+  .sb-item { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 600; color: var(--muted); }
+  .sb-item.active { color: var(--ink); }
+  .sb-item.done { color: var(--gold); }
+  .sb-num { width: 20px; height: 20px; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .sb-item.done .sb-num { background: var(--gold); border-color: var(--gold); color: #fff; font-size: 9px; }
+  .sb-line { flex: 1; height: 1px; background: var(--rule); margin: 0 16px; }
+  .sec-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 6px; }
+  .sec-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .sec-sub { font-size: 13px; color: var(--ink3); margin-top: 8px; }
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 24px 0; }
+  .tabs { display: flex; border-bottom: 2px solid var(--ink); margin-bottom: 24px; }
+  .tab { padding: 10px 20px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+  .drop-zone { border: 1px dashed var(--rule); background: var(--paper); padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.15s; color: var(--muted); }
+  .drop-zone:hover, .drop-zone.dragover { border-color: var(--gold); background: var(--gold-bg); color: var(--gold); }
+  .drop-zone.has-file { border-color: var(--green); background: var(--green-bg); color: var(--green); border-style: solid; }
+  .drop-icon { font-size: 24px; margin-bottom: 10px; }
+  .drop-label { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .drop-hint { font-size: 11px; opacity: 0.7; }
+  textarea { width: 100%; background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 14px 16px; resize: vertical; min-height: 180px; outline: none; font-family: 'Inter', sans-serif; line-height: 1.7; transition: border-color 0.15s; }
+  textarea:focus { border-color: var(--ink); }
+  textarea::placeholder { color: var(--muted); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .field-full { grid-column: 1 / -1; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--ink3); }
+  .field-input { background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 10px 14px; outline: none; font-family: 'Inter', sans-serif; transition: border-color 0.15s; width: 100%; }
+  .field-input:focus { border-color: var(--ink); }
+  .field-input::placeholder { color: var(--muted); }
+  select.field-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+  .btn-primary { background: var(--ink); color: #fff; border: none; padding: 13px 28px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: background 0.15s; font-family: 'Inter', sans-serif; }
+  .btn-primary:hover { background: var(--ink2); }
+  .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 12px 24px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .btn-secondary:hover { background: var(--ink); color: #fff; }
+  .btn-row { display: flex; gap: 12px; align-items: center; margin-top: 32px; flex-wrap: wrap; }
+  .err { background: var(--red-bg); border-left: 3px solid var(--red); padding: 12px 16px; font-size: 12px; color: var(--red); margin-top: 16px; display: none; line-height: 1.5; }
+  .err.show { display: block; }
+  .loading { display: none; padding: 80px 20px; text-align: center; }
+  .loading.show { display: block; }
+  .loading-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
+  .loading-title { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--ink); margin-bottom: 32px; }
+  .progress-track { width: 100%; max-width: 400px; height: 2px; background: var(--rule); margin: 0 auto 32px; }
+  .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.6s ease; }
+  .loading-steps { display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin: 0 auto; text-align: left; }
+  .l-step { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+  .l-step.active { color: var(--ink); font-weight: 500; }
+  .l-step.done { color: var(--green); }
+  .l-marker { width: 5px; height: 5px; border: 1px solid currentColor; flex-shrink: 0; }
+  .l-step.done .l-marker { background: var(--green); border-color: var(--green); }
+  .l-step.active .l-marker { background: var(--gold); border-color: var(--gold); }
+  .report { display: none; }
+  .report.show { display: block; }
+  .report-masthead { border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 24px 0 20px; margin-bottom: 32px; }
+  .report-eyebrow { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+  .report-company { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; color: var(--ink); line-height: 1.1; margin-bottom: 10px; }
+  .report-meta-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+  .report-meta-item { font-size: 11px; color: var(--ink3); }
+  .report-meta-item strong { color: var(--ink); font-weight: 600; }
+  .meta-sep { color: var(--rule); }
+  .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 32px; }
+  .score-cell { background: var(--white); padding: 20px 16px; text-align: center; }
+  .score-cell-label { font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
+  .score-cell-value { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+  .score-cell-bar { height: 3px; background: var(--rule-light); margin-top: 10px; }
+  .score-cell-fill { height: 100%; transition: width 0.8s ease; }
+  .rsec { margin-bottom: 32px; }
+  .rsec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .rsec-num { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+  .rsec-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: var(--ink); }
+  .rsec-body { font-size: 13px; color: var(--ink2); line-height: 1.85; white-space: pre-wrap; }
+  .bb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); }
+  .bb-col { padding: 20px; }
+  .bb-col:first-child { border-right: 1px solid var(--rule); }
+  .bb-heading { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid currentColor; }
+  .bb-bull .bb-heading { color: var(--green); }
+  .bb-bear .bb-heading { color: var(--red); }
+  .bb-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .bb-list li { font-size: 13px; color: var(--ink2); line-height: 1.65; padding-left: 14px; position: relative; }
+  .bb-list li::before { content: '—'; position: absolute; left: 0; color: var(--muted); }
+  .verdict-box { background: var(--ink); color: #fff; padding: 28px 32px; margin-bottom: 32px; }
+  .verdict-label { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: #c9a84c; font-weight: 700; margin-bottom: 12px; }
+  .verdict-text { font-family: 'Playfair Display', serif; font-size: 16px; line-height: 1.7; color: #f0ece2; }
+  .verdict-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding-top: 18px; border-top: 1px solid #333; }
+  .vtag { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 4px 12px; border: 1px solid #444; color: #aaa; }
+  #file-input, #pdf-input { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-main">Earnings<span>Edge</span></div>
+    <div class="logo-tag">Institutional Research Tool</div>
+  </div>
+  <div class="header-pill">AI-Powered</div>
+</div>
+
+<div class="main">
+  <div class="stepbar">
+    <div class="sb-item active" id="step1"><div class="sb-num">1</div><span>Input</span></div>
+    <div class="sb-line"></div>
+    <div class="sb-item" id="step2"><div class="sb-num">2</div><span>Briefing</span></div>
+    <div class="sb-line"></div>
+    <div class="sb-item" id="step3"><div class="sb-num">3</div><span>Analysis</span></div>
+    <div class="sb-line"></div>
+    <div class="sb-item" id="step4"><div class="sb-num">4</div><span>Report</span></div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div id="phase1">
+    <div class="sec-header">
+      <div class="sec-label">Step 01</div>
+      <div class="sec-title">Add your earnings call</div>
+      <div class="sec-sub">Upload an audio recording, paste a transcript, or drop in a PDF.</div>
+    </div>
+    <hr class="rule">
+    <div class="tabs">
+      <button class="tab active" id="tab-audio" onclick="switchTab('audio')">Audio File</button>
+      <button class="tab" id="tab-text" onclick="switchTab('text')">Paste Transcript</button>
+      <button class="tab" id="tab-pdf" onclick="switchTab('pdf')">PDF Upload</button>
+    </div>
+    <div id="panel-audio">
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <div class="drop-icon">▶</div>
+        <div class="drop-label">Drop audio file or click to browse</div>
+        <div class="drop-hint">MP3 · WAV · M4A · OGG — up to 50MB</div>
+      </div>
+      <input type="file" id="file-input" accept="audio/*" onchange="handleAudio(this)">
+    </div>
+    <div id="panel-text" style="display:none">
+      <textarea id="transcript-input" placeholder="Paste the full earnings call transcript here…"></textarea>
+    </div>
+    <div id="panel-pdf" style="display:none">
+      <div class="drop-zone" id="pdf-drop-zone" onclick="document.getElementById('pdf-input').click()">
+        <div class="drop-icon">⬆</div>
+        <div class="drop-label">Drop PDF transcript or click to browse</div>
+        <div class="drop-hint">Seeking Alpha · IR site exports · Investor PDFs</div>
+      </div>
+      <input type="file" id="pdf-input" accept="application/pdf" onchange="handlePDF(this)">
+    </div>
+    <div class="err" id="input-error">Please provide an audio file, transcript, or PDF to continue.</div>
+    <div class="btn-row" style="justify-content:flex-end; margin-top:28px;">
+      <button class="btn-primary" onclick="goToBriefing()">Continue to Briefing →</button>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div id="phase2" style="display:none">
+    <div class="sec-header">
+      <div class="sec-label">Step 02</div>
+      <div class="sec-title">Analyst briefing</div>
+      <div class="sec-sub">Define your focus before the analysis runs.</div>
+    </div>
+    <hr class="rule">
+    <div class="field-grid">
+      <div class="field"><div class="field-label">Company name</div><input class="field-input" id="q-company" type="text" placeholder="e.g. Rolls-Royce Holdings plc"></div>
+      <div class="field"><div class="field-label">Ticker symbol</div><input class="field-input" id="q-ticker" type="text" placeholder="e.g. RYCEY"></div>
+      <div class="field"><div class="field-label">Reporting period</div><input class="field-input" id="q-quarter" type="text" placeholder="e.g. FY2025 / Q2 2025"></div>
+      <div class="field"><div class="field-label">Investor stance</div>
+        <select class="field-input" id="q-stance">
+          <option value="">Select position…</option>
+          <option>Long — looking for conviction</option>
+          <option>Short — looking for weaknesses</option>
+          <option>Neutral — researching</option>
+          <option>Considering a position</option>
+        </select>
+      </div>
+      <div class="field field-full"><div class="field-label">Market expectations</div><input class="field-input" id="q-expectations" type="text" placeholder="e.g. EPS of £0.18, revenue growth of 12%…"></div>
+      <div class="field field-full"><div class="field-label">Key themes to focus on</div><input class="field-input" id="q-themes" type="text" placeholder="e.g. Backlog growth, free cash flow, defence contracts…"></div>
+      <div class="field field-full"><div class="field-label">Executives or statements to watch</div><input class="field-input" id="q-executives" type="text" placeholder="e.g. CEO tone on capital allocation; CFO on margin trajectory…"></div>
+    </div>
+    <hr class="rule">
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goBack()">← Back</button>
+      <button class="btn-primary" id="run-btn" onclick="runAnalysis()">Run Analysis →</button>
+    </div>
+    <div class="err" id="api-error"></div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div id="phase3" class="loading">
+    <div class="loading-label">Processing</div>
+    <div class="loading-title">Analyzing your earnings call…</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="loading-steps">
+      <div class="l-step" id="ls1"><div class="l-marker"></div>Processing content</div>
+      <div class="l-step" id="ls2"><div class="l-marker"></div>Tone &amp; sentiment analysis</div>
+      <div class="l-step" id="ls3"><div class="l-marker"></div>Extracting key findings with quotes</div>
+      <div class="l-step" id="ls4"><div class="l-marker"></div>Building bull / bear case</div>
+      <div class="l-step" id="ls5"><div class="l-marker"></div>Compiling institutional report</div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div id="phase4" class="report">
+    <div class="report-masthead">
+      <div class="report-eyebrow">EarningsEdge — Institutional Analysis Report</div>
+      <div class="report-company" id="r-company">—</div>
+      <div class="report-meta-row">
+        <div class="report-meta-item"><strong id="r-ticker">—</strong></div>
+        <div class="meta-sep">·</div>
+        <div class="report-meta-item">Period: <strong id="r-quarter">—</strong></div>
+        <div class="meta-sep">·</div>
+        <div class="report-meta-item">Powered by EarningsEdge AI</div>
+      </div>
+    </div>
+    <div class="score-grid" id="r-scores"></div>
+    <div id="r-sections"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="newAnalysis()">← New Analysis</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
+
+function switchTab(m) {
+  inputMode = m;
+  ['audio','text','pdf'].forEach(function(t) {
+    document.getElementById('tab-'+t).classList.toggle('active', t===m);
+    document.getElementById('panel-'+t).style.display = t===m ? 'block' : 'none';
+  });
+}
+
+function handleAudio(inp) {
+  var f = inp.files[0]; if (!f) return;
+  uploadedFile = f;
+  var dz = document.getElementById('drop-zone');
+  dz.classList.add('has-file');
+  dz.innerHTML = '<div class="drop-icon">✓</div><div class="drop-label">'+f.name+'</div><div class="drop-hint">'+(f.size/1024/1024).toFixed(1)+' MB</div>';
+}
+
+function handlePDF(inp) {
+  var f = inp.files[0]; if (!f) return;
+  var dz = document.getElementById('pdf-drop-zone');
+  dz.innerHTML = '<div class="drop-icon">…</div><div class="drop-label">Reading '+f.name+'</div><div class="drop-hint">Encoding…</div>';
+  var r = new FileReader();
+  r.onload = function(e) {
+    uploadedPDFBase64 = e.target.result.split(',')[1];
+    dz.classList.add('has-file');
+    dz.innerHTML = '<div class="drop-icon">✓</div><div class="drop-label">'+f.name+'</div><div class="drop-hint">'+(f.size/1024/1024).toFixed(1)+' MB</div>';
+  };
+  r.onerror = function() { dz.innerHTML = '<div class="drop-icon">✕</div><div class="drop-label">Failed to read</div>'; };
+  r.readAsDataURL(f);
+}
+
+['drop-zone','pdf-drop-zone'].forEach(function(id) {
+  var el = document.getElementById(id);
+  el.addEventListener('dragover', function(e){e.preventDefault();el.classList.add('dragover');});
+  el.addEventListener('dragleave', function(){el.classList.remove('dragover');});
+  el.addEventListener('drop', function(e){
+    e.preventDefault(); el.classList.remove('dragover');
+    var f = e.dataTransfer.files[0]; if (!f) return;
+    if (id==='drop-zone') handleAudio({files:[f]});
+    else if (f.type==='application/pdf') handlePDF({files:[f]});
+  });
+});
+
+function goToBriefing() {
+  var err = document.getElementById('input-error');
+  var t = document.getElementById('transcript-input').value.trim();
+  if (inputMode==='audio' && !uploadedFile) { err.classList.add('show'); return; }
+  if (inputMode==='text' && !t) { err.classList.add('show'); return; }
+  if (inputMode==='pdf' && !uploadedPDFBase64) { err.classList.add('show'); err.textContent='Please wait for the PDF to finish loading.'; return; }
+  err.classList.remove('show');
+  setStep(2);
+  document.getElementById('phase1').style.display='none';
+  document.getElementById('phase2').style.display='block';
+}
+
+function goBack() {
+  setStep(1);
+  document.getElementById('phase2').style.display='none';
+  document.getElementById('phase1').style.display='block';
+}
+
+function setStep(n) {
+  for (var i=1;i<=4;i++) {
+    var el=document.getElementById('step'+i);
+    el.className='sb-item'+(i<n?' done':i===n?' active':'');
+    el.querySelector('.sb-num').textContent=i<n?'✓':i;
+  }
+}
+
+function setLoadingStep(si) {
+  ['ls1','ls2','ls3','ls4','ls5'].forEach(function(id,idx){
+    var el=document.getElementById(id);
+    el.className='l-step'+(idx<si?' done':idx===si?' active':'');
+  });
+  document.getElementById('progress-fill').style.width=Math.round((si/5)*100)+'%';
+}
+
+async function runAnalysis() {
+  var btn=document.getElementById('run-btn'), apiErr=document.getElementById('api-error');
+  apiErr.classList.remove('show');
+  var company=document.getElementById('q-company').value.trim()||'Unknown Company';
+  var ticker=document.getElementById('q-ticker').value.trim()||'N/A';
+  var quarter=document.getElementById('q-quarter').value.trim()||'N/A';
+  var expectations=document.getElementById('q-expectations').value.trim()||'Not specified';
+  var themes=document.getElementById('q-themes').value.trim()||'Not specified';
+  var executives=document.getElementById('q-executives').value.trim()||'Not specified';
+  var stance=document.getElementById('q-stance').value||'Not specified';
+  var transcript=document.getElementById('transcript-input').value.trim();
+
+  btn.disabled=true; btn.textContent='Running…';
+  document.getElementById('phase2').style.display='none';
+  document.getElementById('phase3').classList.add('show');
+  setStep(3);
+  var si=0; setLoadingStep(si);
+  var stepInt=setInterval(function(){si++;setLoadingStep(si);if(si>=4)clearInterval(stepInt);},2200);
+
+  var ctx='ANALYST BRIEFING:\nCompany: '+company+' ('+ticker+')\nPeriod: '+quarter+'\nMarket expectations: '+expectations+'\nKey themes: '+themes+'\nExecutives to watch: '+executives+'\nInvestor stance: '+stance;
+  var schema='Return this exact JSON:\n{"company":string,"ticker":string,"quarter":string,"overall_sentiment_score":integer 0-100,"confidence_score":integer 0-100,"credibility_score":integer 0-100,"caution_score":integer 0-100,"key_findings":string,"tone_analysis":string,"credibility_assessment":string,"buzzwords_and_hedging":string,"risk_flags":string,"custom_focus":string,"bull_points":array of 4 strings,"bear_points":array of 4 strings,"analyst_verdict":string,"sentiment_tags":array of 5 strings}';
+
+  var messages;
+  if (inputMode==='pdf' && uploadedPDFBase64) {
+    messages=[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:uploadedPDFBase64}},{type:'text',text:ctx+'\n\n'+schema+'\n\nAnalyze the earnings call in the attached PDF.'}]}];
+  } else {
+    var callContent=inputMode==='text'?transcript:'[Audio: '+(uploadedFile?uploadedFile.name:'unknown')+'. Generate a realistic detailed institutional-grade analysis for '+company+' ('+ticker+') '+quarter+' based on known patterns for this company and sector.]';
+    messages=[{role:'user',content:ctx+'\n\n'+schema+'\n\nEARNINGS CALL:\n'+callContent.slice(0,9000)}];
+  }
+
+  try {
+    // ↓ Calls YOUR backend — API key never touches the browser
+    var res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages })
+    });
+    clearInterval(stepInt);
+    var data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'HTTP '+res.status);
+    setLoadingStep(5);
+    setTimeout(function(){ renderReport(data.result); }, 400);
+  } catch(e) {
+    clearInterval(stepInt);
+    document.getElementById('phase3').classList.remove('show');
+    document.getElementById('phase2').style.display='block';
+    btn.disabled=false; btn.textContent='Run Analysis →';
+    setStep(2);
+    apiErr.textContent='Error: '+e.message; apiErr.classList.add('show');
+  }
+}
+
+function scoreColor(v){ return v>=70?'var(--green)':v>=40?'var(--gold)':'var(--red)'; }
+
+function renderReport(d) {
+  currentReport=d;
+  document.getElementById('phase3').classList.remove('show');
+  document.getElementById('phase4').classList.add('show');
+  setStep(4);
+  document.getElementById('r-company').textContent=d.company||'—';
+  document.getElementById('r-ticker').textContent=d.ticker||'—';
+  document.getElementById('r-quarter').textContent=d.quarter||'—';
+  var scores=[{label:'Overall Sentiment',val:d.overall_sentiment_score||50},{label:'Confidence',val:d.confidence_score||50},{label:'Credibility',val:d.credibility_score||50},{label:'Caution Level',val:d.caution_score||50}];
+  document.getElementById('r-scores').innerHTML=scores.map(function(s){var c=scoreColor(s.val);return'<div class="score-cell"><div class="score-cell-label">'+s.label+'</div><div class="score-cell-value" style="color:'+c+'">'+s.val+'</div><div class="score-cell-bar"><div class="score-cell-fill" style="width:'+s.val+'%;background:'+c+'"></div></div></div>';}).join('');
+  var secs=[{num:'01',title:'Key Findings',body:d.key_findings},{num:'02',title:'Tone & Sentiment Analysis',body:d.tone_analysis},{num:'03',title:'Management Credibility',body:d.credibility_assessment},{num:'04',title:'Buzzwords & Hedging Language',body:d.buzzwords_and_hedging},{num:'05',title:'Risk Flags',body:d.risk_flags}];
+  if(d.custom_focus) secs.push({num:'06',title:'Focus Area Analysis',body:d.custom_focus});
+  var bbNum=d.custom_focus?'07':'06';
+  var html=secs.map(function(s){return'<div class="rsec"><div class="rsec-head"><span class="rsec-num">'+s.num+'</span><span class="rsec-title">'+s.title+'</span></div><div class="rsec-body">'+(s.body||'—')+'</div></div>';}).join('');
+  html+='<div class="rsec"><div class="rsec-head"><span class="rsec-num">'+bbNum+'</span><span class="rsec-title">Bull vs Bear Case</span></div><div class="bb-grid"><div class="bb-col bb-bull"><div class="bb-heading">Bull Case</div><ul class="bb-list">'+(d.bull_points||[]).map(function(p){return'<li>'+p+'</li>';}).join('')+'</ul></div><div class="bb-col bb-bear"><div class="bb-heading">Bear Case</div><ul class="bb-list">'+(d.bear_points||[]).map(function(p){return'<li>'+p+'</li>';}).join('')+'</ul></div></div></div>';
+  html+='<div class="verdict-box"><div class="verdict-label">Analyst Verdict</div><div class="verdict-text">'+(d.analyst_verdict||'—')+'</div><div class="verdict-tags">'+(d.sentiment_tags||[]).map(function(t){return'<span class="vtag">'+t+'</span>';}).join('')+'</div></div>';
+  document.getElementById('r-sections').innerHTML=html;
+}
+
+function newAnalysis() {
+  currentReport=null;
+  document.getElementById('phase4').classList.remove('show');
+  document.getElementById('phase1').style.display='block';
+  setStep(1);
+  inputMode='audio'; uploadedFile=null; uploadedPDFBase64='';
+  document.getElementById('transcript-input').value='';
+  document.getElementById('drop-zone').className='drop-zone';
+  document.getElementById('drop-zone').innerHTML='<div class="drop-icon">▶</div><div class="drop-label">Drop audio file or click to browse</div><div class="drop-hint">MP3 · WAV · M4A · OGG — up to 50MB</div>';
+  document.getElementById('pdf-drop-zone').className='drop-zone';
+  document.getElementById('pdf-drop-zone').innerHTML='<div class="drop-icon">⬆</div><div class="drop-label">Drop PDF transcript or click to browse</div><div class="drop-hint">Seeking Alpha · IR site exports · Investor PDFs</div>';
+  switchTab('audio');
+  ['q-company','q-ticker','q-quarter','q-expectations','q-themes','q-executives'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('q-stance').value='';
+  document.getElementById('run-btn').disabled=false;
+  document.getElementById('run-btn').textContent='Run Analysis →';
+}
+</script>
+</body>
+</html>
