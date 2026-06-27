@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="/favicon.png">
 <title>EarningsEdge — Institutional Earnings Analysis</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -110,6 +109,22 @@
   .verdict-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding-top: 18px; border-top: 1px solid #333; }
   .vtag { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 4px 12px; border: 1px solid #444; color: #aaa; }
   #file-input, #pdf-input { display: none; }
+  .usage-bar { display: flex; align-items: center; justify-content: space-between; background: var(--paper); border: 1px solid var(--rule); padding: 12px 18px; margin-bottom: 28px; }
+  .usage-left { font-size: 12px; color: var(--ink3); }
+  .usage-left strong { color: var(--ink); font-size: 15px; }
+  .usage-left span { color: var(--muted); font-size: 11px; margin-left: 6px; }
+  .usage-track { flex: 1; height: 3px; background: var(--rule-light); margin: 0 20px; }
+  .usage-fill { height: 100%; background: var(--green); transition: width 0.4s ease; }
+  .usage-fill.warn { background: var(--gold); }
+  .usage-fill.low { background: var(--red); }
+  .usage-reset { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .rate-wall { display: none; background: var(--paper); border: 1px solid var(--rule); padding: 40px 32px; text-align: center; margin-bottom: 28px; }
+  .rate-wall.show { display: block; }
+  .rate-wall-icon { font-size: 32px; margin-bottom: 16px; }
+  .rate-wall-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .rate-wall-sub { font-size: 13px; color: var(--ink3); line-height: 1.7; margin-bottom: 20px; }
+  .rate-wall-timer { font-size: 28px; font-family: 'JetBrains Mono', monospace; color: var(--gold); font-weight: 500; margin-bottom: 6px; }
+  .rate-wall-timer-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -131,6 +146,22 @@
     <div class="sb-item" id="step3"><div class="sb-num">3</div><span>Analysis</span></div>
     <div class="sb-line"></div>
     <div class="sb-item" id="step4"><div class="sb-num">4</div><span>Report</span></div>
+  </div>
+
+  <!-- USAGE BAR -->
+  <div class="usage-bar" id="usage-bar">
+    <div class="usage-left"><strong id="usage-count">10</strong> analyses remaining<span id="usage-period">this window</span></div>
+    <div class="usage-track"><div class="usage-fill" id="usage-fill" style="width:100%"></div></div>
+    <div class="usage-reset" id="usage-reset">Resets in —</div>
+  </div>
+
+  <!-- RATE LIMIT WALL -->
+  <div class="rate-wall" id="rate-wall">
+    <div class="rate-wall-icon">⏱</div>
+    <div class="rate-wall-title">You've used all 10 analyses</div>
+    <div class="rate-wall-sub">EarningsEdge allows 10 analyses every 10 minutes to keep the service running smoothly.<br>Your limit resets automatically — no action needed.</div>
+    <div class="rate-wall-timer" id="rate-wall-timer">—:——</div>
+    <div class="rate-wall-timer-label">until your analyses refresh</div>
   </div>
 
   <!-- PHASE 1 -->
@@ -241,6 +272,57 @@
 
 <script>
 var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
+var LIMIT = 10, resetInterval = null;
+
+function updateUsageBar(remaining, resetsAt) {
+  if (remaining === undefined) return;
+  var count = document.getElementById('usage-count');
+  var fill = document.getElementById('usage-fill');
+  var reset = document.getElementById('usage-reset');
+  var wall = document.getElementById('rate-wall');
+  var bar = document.getElementById('usage-bar');
+
+  count.textContent = remaining;
+  var pct = (remaining / LIMIT) * 100;
+  fill.style.width = pct + '%';
+  fill.className = 'usage-fill' + (pct <= 20 ? ' low' : pct <= 50 ? ' warn' : '');
+
+  if (resetsAt) {
+    startResetCountdown(resetsAt, reset);
+    if (remaining <= 0) {
+      wall.classList.add('show');
+      startWallCountdown(resetsAt);
+    } else {
+      wall.classList.remove('show');
+    }
+  }
+}
+
+function startResetCountdown(resetsAt, el) {
+  if (resetInterval) clearInterval(resetInterval);
+  function tick() {
+    var secs = Math.max(0, Math.round((resetsAt - Date.now()) / 1000));
+    if (secs <= 0) { el.textContent = 'Resets now'; clearInterval(resetInterval); return; }
+    var m = Math.floor(secs / 60), s = secs % 60;
+    el.textContent = 'Resets in ' + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  tick(); resetInterval = setInterval(tick, 1000);
+}
+
+function startWallCountdown(resetsAt) {
+  var timerEl = document.getElementById('rate-wall-timer');
+  var wallInt = setInterval(function() {
+    var secs = Math.max(0, Math.round((resetsAt - Date.now()) / 1000));
+    var m = Math.floor(secs / 60), s = secs % 60;
+    timerEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    if (secs <= 0) {
+      clearInterval(wallInt);
+      document.getElementById('rate-wall').classList.remove('show');
+      updateUsageBar(LIMIT, null);
+      document.getElementById('usage-reset').textContent = 'Resets in —';
+    }
+  }, 1000);
+}
 
 function switchTab(m) {
   inputMode = m;
@@ -357,16 +439,25 @@ async function runAnalysis() {
     });
     clearInterval(stepInt);
     var data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'HTTP '+res.status);
+    if (!res.ok) {
+      if (data.rateLimited) { updateUsageBar(0, data.resetsAt); throw new Error('__ratelimit__'); }
+      throw new Error(data.error || 'HTTP '+res.status);
+    }
+    updateUsageBar(data.remaining, data.resetsAt);
     setLoadingStep(5);
     setTimeout(function(){ renderReport(data.result); }, 400);
   } catch(e) {
     clearInterval(stepInt);
     document.getElementById('phase3').classList.remove('show');
-    document.getElementById('phase2').style.display='block';
-    btn.disabled=false; btn.textContent='Run Analysis →';
-    setStep(2);
-    apiErr.textContent='Error: '+e.message; apiErr.classList.add('show');
+    if (e.message !== '__ratelimit__') {
+      document.getElementById('phase2').style.display='block';
+      btn.disabled=false; btn.textContent='Run Analysis →';
+      setStep(2);
+      apiErr.textContent='Error: '+e.message; apiErr.classList.add('show');
+    } else {
+      document.getElementById('phase1').style.display='block';
+      setStep(1);
+    }
   }
 }
 
