@@ -29,7 +29,7 @@
 
   /* AUTH WALL */
   .auth-wall { display: none; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
-  .auth-wall.show { display: flex; }
+  .auth-wall.show { display: flex !important; }
   .auth-wall-icon { font-size: 40px; margin-bottom: 20px; }
   .auth-wall-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
   .auth-wall-sub { font-size: 14px; color: var(--ink3); max-width: 420px; margin: 0 auto 36px; line-height: 1.7; }
@@ -200,7 +200,7 @@
 <div class="main">
 
   <!-- AUTH WALL -->
-  <div class="auth-wall show" id="auth-wall">
+  <div class="auth-wall" id="auth-wall" style="display:flex">
     <div class="auth-wall-icon">📊</div>
     <div class="auth-wall-title">Institutional earnings analysis, powered by AI.</div>
     <div class="auth-wall-sub">EarningsEdge reads between the lines of any earnings call — from tone to executive statements — so you always know what's really being said.</div>
@@ -440,7 +440,7 @@ function showWall() {
 
 async function setSession(session) {
   currentSession = session;
-  document.getElementById('auth-wall').classList.remove('show');
+  document.getElementById('auth-wall').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('header-email').textContent = session.user.email;
   document.getElementById('header-logout-btn').style.display = 'block';
