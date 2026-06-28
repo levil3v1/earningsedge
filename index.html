@@ -232,7 +232,10 @@
         <span class="credits-plan free" id="credits-plan-badge">Free</span>
       </div>
       <div class="credits-track"><div class="credits-fill" id="credits-fill" style="width:0%"></div></div>
-      <button class="credits-upgrade" onclick="showScreen('screen-pricing')">Upgrade →</button>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <button class="credits-upgrade" id="manage-btn" onclick="manageSubscription()" style="display:none">Manage Plan</button>
+        <button class="credits-upgrade" id="upgrade-btn" onclick="showScreen('screen-pricing')">Upgrade →</button>
+      </div>
     </div>
 
     <div class="stepbar">
@@ -439,6 +442,7 @@ window.addEventListener('load', async function() {
     await setSession(result.data.session);
   } else {
     showScreen('screen-wall');
+    openAuth('signup');
   }
   sb.auth.onAuthStateChange(async function(event, session) {
     if (event === 'SIGNED_IN' && session) await setSession(session);
@@ -492,6 +496,7 @@ function updateCreditsBar(credits, plan) {
   currentCredits = credits;
   currentPlan = plan || 'free';
   var isPro = currentPlan === 'pro';
+  var isPaid = currentPlan === 'pro' || currentPlan === 'starter';
   document.getElementById('credits-bar').style.display = 'flex';
   document.getElementById('credits-count').textContent = isPro ? '∞' : credits;
   var badge = document.getElementById('credits-plan-badge');
@@ -501,6 +506,26 @@ function updateCreditsBar(credits, plan) {
   var fill = document.getElementById('credits-fill');
   fill.style.width = pct + '%';
   fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits === 2 ? ' warn' : '');
+  document.getElementById('manage-btn').style.display = isPaid ? 'inline' : 'none';
+  document.getElementById('upgrade-btn').style.display = isPaid ? 'none' : 'inline';
+}
+
+async function manageSubscription() {
+  var btn = document.getElementById('manage-btn');
+  var orig = btn.textContent;
+  btn.textContent = 'Loading…';
+  try {
+    var res = await fetch('/api/portal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token }
+    });
+    var data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else throw new Error(data.error || 'Could not open portal');
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+  btn.textContent = orig;
 }
 
 async function doLogout() {
