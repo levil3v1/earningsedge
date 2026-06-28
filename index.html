@@ -11,58 +11,55 @@
   :root {
     --ink: #0a0a0a; --ink2: #2a2a2a; --ink3: #4a4a4a; --muted: #888;
     --rule: #d8d4cc; --rule-light: #ece9e2; --bg: #f5f2eb; --paper: #faf9f6;
-    --white: #ffffff; --gold: #8a6c2a; --gold-bg: #f5f0e4;
+    --white: #fff; --gold: #8a6c2a; --gold-bg: #f5f0e4;
     --green: #1a5c3a; --green-bg: #eaf3ee; --red: #8b1c1c; --red-bg: #faeaea;
   }
   body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+  /* HEADER */
   .header { background: var(--ink); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
-  .logo { display: flex; align-items: baseline; gap: 2px; }
   .logo-main { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
   .logo-main span { color: #c9a84c; }
   .logo-tag { font-size: 10px; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-left: 14px; font-weight: 500; border-left: 1px solid #333; padding-left: 14px; }
+  .logo { display: flex; align-items: baseline; }
   .header-right { display: flex; align-items: center; gap: 12px; }
   .header-user { font-size: 11px; color: #aaa; }
-  .header-btn { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 6px 14px; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
-  .header-btn-ghost { background: transparent; color: #c9a84c; border: 1px solid #c9a84c44; }
+  .hbtn { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 6px 14px; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
+  .hbtn-ghost { background: transparent; color: #c9a84c; border: 1px solid #c9a84c44; }
+
   .main { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
 
-  /* AUTH WALL */
-  #auth-wall { display: flex; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
-  .auth-wall-icon { font-size: 40px; margin-bottom: 20px; }
-  .auth-wall-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
-  .auth-wall-sub { font-size: 14px; color: var(--ink3); max-width: 420px; margin: 0 auto 36px; line-height: 1.7; }
-  .auth-wall-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
-  .auth-wall-note { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
-  .try-link { background: none; border: none; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; }
+  /* SCREENS — only one visible at a time */
+  .screen { display: none; }
+  .screen.active { display: block; }
 
-  /* AUTH MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
-  .modal-overlay.show { display: flex; }
-  .modal { background: var(--paper); max-width: 440px; width: calc(100% - 40px); padding: 40px; position: relative; }
-  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
-  .modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
-  .modal-sub { font-size: 12px; color: var(--ink3); margin-bottom: 28px; }
-  .modal-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-  .modal-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--ink3); }
-  .modal-input { background: var(--white); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 11px 14px; outline: none; font-family: 'Inter', sans-serif; width: 100%; }
-  .modal-input:focus { border-color: var(--ink); }
-  .modal-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 13px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 8px; }
-  .modal-btn:disabled { background: var(--muted); cursor: not-allowed; }
-  .modal-switch { text-align: center; margin-top: 20px; font-size: 12px; color: var(--ink3); }
-  .modal-switch a { color: var(--gold); cursor: pointer; text-decoration: underline; }
-  .modal-err { background: var(--red-bg); border-left: 3px solid var(--red); padding: 10px 14px; font-size: 12px; color: var(--red); margin-top: 12px; display: none; }
-  .modal-err.show { display: block; }
-  .modal-ok { background: var(--green-bg); border-left: 3px solid var(--green); padding: 10px 14px; font-size: 12px; color: var(--green); margin-top: 12px; display: none; }
-  .modal-ok.show { display: block; }
+  /* AUTH WALL SCREEN */
+  #screen-wall { display: none; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
+  #screen-wall.active { display: flex; }
+  .wall-icon { font-size: 40px; margin-bottom: 20px; }
+  .wall-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+  .wall-sub { font-size: 14px; color: var(--ink3); max-width: 420px; margin: 0 auto 36px; line-height: 1.7; }
+  .wall-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
+  .wall-note { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
+  .wall-guest { background: none; border: none; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; }
 
-  /* PRICING */
-  .pricing-wall { display: none; padding: 40px 0; }
-  .pricing-wall.show { display: block; }
-  .pricing-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 8px; }
-  .pricing-sub { font-size: 13px; color: var(--ink3); text-align: center; margin-bottom: 36px; }
-  .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 640px; margin: 0 auto 24px; }
+  /* GUEST BLOCK SCREEN */
+  #screen-guest-block { display: none; min-height: 70vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
+  #screen-guest-block.active { display: flex; }
+  .gb-icon { font-size: 40px; margin-bottom: 20px; }
+  .gb-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+  .gb-sub { font-size: 13px; color: var(--ink3); max-width: 400px; margin: 0 auto 28px; line-height: 1.7; }
+  .gb-btns { display: flex; gap: 12px; justify-content: center; }
+
+  /* PRICING SCREEN */
+  #screen-pricing { display: none; }
+  #screen-pricing.active { display: block; }
+  .pricing-header { text-align: center; margin-bottom: 36px; padding-top: 8px; }
+  .pricing-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .pricing-sub { font-size: 13px; color: var(--ink3); }
+  .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 640px; margin: 0 auto 20px; }
   .pricing-card { background: var(--paper); border: 1px solid var(--rule); padding: 32px 28px; position: relative; }
-  .pricing-card.featured { border-color: var(--ink); border-width: 2px; }
+  .pricing-card.featured { border: 2px solid var(--ink); }
   .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; padding: 4px 14px; white-space: nowrap; }
   .pricing-plan { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--gold); margin-bottom: 12px; }
   .pricing-price { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
@@ -73,13 +70,14 @@
   .pricing-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 13px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
   .pricing-btn.outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
   .pricing-btn:disabled { background: var(--muted); cursor: not-allowed; }
-  .pricing-secure { text-align: center; font-size: 11px; color: var(--muted); }
+  .pricing-secure { text-align: center; font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+  .pricing-back { display: block; text-align: center; background: none; border: none; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; }
 
   /* CREDITS BAR */
   .credits-bar { display: flex; align-items: center; justify-content: space-between; background: var(--paper); border: 1px solid var(--rule); padding: 12px 18px; margin-bottom: 28px; }
-  .credits-left { font-size: 12px; color: var(--ink3); }
+  .credits-left { font-size: 12px; color: var(--ink3); display: flex; align-items: center; gap: 8px; }
   .credits-left strong { color: var(--ink); font-size: 15px; }
-  .credits-plan { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 3px 10px; margin-left: 8px; }
+  .credits-plan { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 3px 10px; }
   .credits-plan.free { background: var(--rule-light); color: var(--muted); }
   .credits-plan.starter { background: var(--gold-bg); color: var(--gold); }
   .credits-plan.pro { background: var(--ink); color: #fff; }
@@ -102,22 +100,21 @@
   .sec-sub { font-size: 13px; color: var(--ink3); margin-top: 8px; }
   .rule { border: none; border-top: 1px solid var(--rule); margin: 24px 0; }
   .tabs { display: flex; border-bottom: 2px solid var(--ink); margin-bottom: 24px; }
-  .tab { padding: 10px 20px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+  .tab { padding: 10px 20px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; }
   .tab.active { color: var(--ink); border-bottom-color: var(--ink); }
   .drop-zone { border: 1px dashed var(--rule); background: var(--paper); padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.15s; color: var(--muted); }
-  .drop-zone:hover, .drop-zone.dragover { border-color: var(--gold); background: var(--gold-bg); color: var(--gold); }
+  .drop-zone:hover { border-color: var(--gold); background: var(--gold-bg); color: var(--gold); }
   .drop-zone.has-file { border-color: var(--green); background: var(--green-bg); color: var(--green); border-style: solid; }
   .drop-icon { font-size: 24px; margin-bottom: 10px; }
   .drop-label { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
   .drop-hint { font-size: 11px; opacity: 0.7; }
-  textarea { width: 100%; background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 14px 16px; resize: vertical; min-height: 180px; outline: none; font-family: 'Inter', sans-serif; line-height: 1.7; transition: border-color 0.15s; }
-  textarea:focus { border-color: var(--ink); }
+  textarea { width: 100%; background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 14px 16px; resize: vertical; min-height: 180px; outline: none; font-family: 'Inter', sans-serif; line-height: 1.7; }
   textarea::placeholder { color: var(--muted); }
   .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .field-full { grid-column: 1 / -1; }
   .field { display: flex; flex-direction: column; gap: 6px; }
   .field-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--ink3); }
-  .field-input { background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 10px 14px; outline: none; font-family: 'Inter', sans-serif; transition: border-color 0.15s; width: 100%; }
+  .field-input { background: var(--paper); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 10px 14px; outline: none; font-family: 'Inter', sans-serif; width: 100%; }
   .field-input:focus { border-color: var(--ink); }
   .field-input::placeholder { color: var(--muted); }
   select.field-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
@@ -141,16 +138,14 @@
   .l-marker { width: 5px; height: 5px; border: 1px solid currentColor; flex-shrink: 0; }
   .l-step.done .l-marker { background: var(--green); border-color: var(--green); }
   .l-step.active .l-marker { background: var(--gold); border-color: var(--gold); }
-  .report { display: none; }
-  .report.show { display: block; }
   .report-masthead { border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 24px 0 20px; margin-bottom: 32px; }
   .report-eyebrow { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
   .report-company { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; color: var(--ink); line-height: 1.1; margin-bottom: 10px; }
-  .report-meta-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+  .report-meta-row { display: flex; gap: 24px; flex-wrap: wrap; }
   .report-meta-item { font-size: 11px; color: var(--ink3); }
   .report-meta-item strong { color: var(--ink); font-weight: 600; }
   .meta-sep { color: var(--rule); }
-  .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 32px; }
+  .score-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 32px; }
   .score-cell { background: var(--white); padding: 20px 16px; text-align: center; }
   .score-cell-label { font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
   .score-cell-value { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
@@ -175,6 +170,27 @@
   .verdict-text { font-family: 'Playfair Display', serif; font-size: 16px; line-height: 1.7; color: #f0ece2; }
   .verdict-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding-top: 18px; border-top: 1px solid #333; }
   .vtag { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 4px 12px; border: 1px solid #444; color: #aaa; }
+
+  /* AUTH MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: var(--paper); max-width: 440px; width: calc(100% - 40px); padding: 40px; position: relative; }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .modal-sub { font-size: 12px; color: var(--ink3); margin-bottom: 28px; }
+  .modal-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .modal-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--ink3); }
+  .modal-input { background: var(--white); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 11px 14px; outline: none; font-family: 'Inter', sans-serif; width: 100%; }
+  .modal-input:focus { border-color: var(--ink); }
+  .modal-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 13px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 8px; }
+  .modal-btn:disabled { background: var(--muted); cursor: not-allowed; }
+  .modal-switch { text-align: center; margin-top: 20px; font-size: 12px; color: var(--ink3); }
+  .modal-switch a { color: var(--gold); cursor: pointer; text-decoration: underline; }
+  .modal-err { background: var(--red-bg); border-left: 3px solid var(--red); padding: 10px 14px; font-size: 12px; color: var(--red); margin-top: 12px; display: none; }
+  .modal-err.show { display: block; }
+  .modal-ok { background: var(--green-bg); border-left: 3px solid var(--green); padding: 10px 14px; font-size: 12px; color: var(--green); margin-top: 12px; display: none; }
+  .modal-ok.show { display: block; }
+
   #file-input, #pdf-input { display: none; }
 </style>
 </head>
@@ -187,27 +203,37 @@
   </div>
   <div class="header-right">
     <span class="header-user" id="header-email"></span>
-    <button class="header-btn header-btn-ghost" id="header-logout-btn" onclick="doLogout()" style="display:none">Log Out</button>
+    <button class="hbtn hbtn-ghost" id="header-logout-btn" onclick="doLogout()" style="display:none">Log Out</button>
   </div>
 </div>
 
 <div class="main">
 
-  <!-- AUTH WALL -->
-  <div id="auth-wall">
-    <div class="auth-wall-icon">📊</div>
-    <div class="auth-wall-title">Institutional earnings analysis, powered by AI.</div>
-    <div class="auth-wall-sub">EarningsEdge reads between the lines of any earnings call — from tone to executive statements — so you always know what's really being said.</div>
-    <div class="auth-wall-btns">
+  <!-- SCREEN 1: AUTH WALL -->
+  <div id="screen-wall" class="active">
+    <div class="wall-icon">📊</div>
+    <div class="wall-title">Institutional earnings analysis, powered by AI.</div>
+    <div class="wall-sub">EarningsEdge reads between the lines of any earnings call — from tone to executive statements — so you always know what's really being said.</div>
+    <div class="wall-btns">
       <button class="btn-primary" onclick="openAuth('signup')">Create Free Account</button>
       <button class="btn-secondary" onclick="openAuth('login')">Log In</button>
     </div>
-    <div class="auth-wall-note">3 free analyses included. No credit card required.</div>
-    <button class="try-link" onclick="startGuest()">Try one analysis without an account →</button>
+    <div class="wall-note">3 free analyses included. No credit card required.</div>
+    <button class="wall-guest" onclick="startGuest()">Try one analysis without an account →</button>
   </div>
 
-  <!-- APP -->
-  <div id="app" style="display:none">
+  <!-- SCREEN 2: MAIN APP -->
+  <div id="screen-app" class="screen">
+
+    <!-- Credits bar (logged in only) -->
+    <div class="credits-bar" id="credits-bar" style="display:none">
+      <div class="credits-left">
+        <strong id="credits-count">0</strong> analyses remaining
+        <span class="credits-plan free" id="credits-plan-badge">Free</span>
+      </div>
+      <div class="credits-track"><div class="credits-fill" id="credits-fill" style="width:0%"></div></div>
+      <button class="credits-upgrade" onclick="showScreen('screen-pricing')">Upgrade →</button>
+    </div>
 
     <div class="stepbar">
       <div class="sb-item active" id="step1"><div class="sb-num">1</div><span>Input</span></div>
@@ -219,58 +245,7 @@
       <div class="sb-item" id="step4"><div class="sb-num">4</div><span>Report</span></div>
     </div>
 
-    <!-- CREDITS BAR -->
-    <div class="credits-bar" id="credits-bar" style="display:none">
-      <div class="credits-left">
-        <strong id="credits-count">0</strong> analyses remaining
-        <span class="credits-plan free" id="credits-plan-badge">Free</span>
-      </div>
-      <div class="credits-track"><div class="credits-fill" id="credits-fill" style="width:0%"></div></div>
-      <div style="display:flex;gap:12px;align-items:center;">
-        <button class="credits-upgrade" id="manage-sub-btn" onclick="manageSubscription()" style="display:none">Manage Plan</button>
-        <button class="credits-upgrade" onclick="showPricing()">Upgrade →</button>
-      </div>
-    </div>
-
-    <!-- PRICING WALL -->
-    <div class="pricing-wall" id="pricing-wall">
-      <div class="pricing-title">Upgrade your plan</div>
-      <div class="pricing-sub">You've used all your free analyses. Upgrade to keep going.</div>
-      <div class="pricing-grid">
-        <div class="pricing-card featured">
-          <div class="pricing-badge">Most Popular</div>
-          <div class="pricing-plan">Starter</div>
-          <div class="pricing-price">$9.99</div>
-          <div class="pricing-period">per month</div>
-          <ul class="pricing-features">
-            <li>20 analyses per month</li>
-            <li>Full institutional report</li>
-            <li>Bull / bear breakdown</li>
-            <li>Tone & credibility scoring</li>
-            <li>Risk flag detection</li>
-          </ul>
-          <button class="pricing-btn" id="starter-btn" onclick="startCheckout('starter')">Get Starter</button>
-        </div>
-        <div class="pricing-card">
-          <div class="pricing-plan">Pro</div>
-          <div class="pricing-price">$19.99</div>
-          <div class="pricing-period">per month</div>
-          <ul class="pricing-features">
-            <li>Unlimited analyses</li>
-            <li>Full institutional report</li>
-            <li>Bull / bear breakdown</li>
-            <li>Tone & credibility scoring</li>
-            <li>Risk flag detection</li>
-          </ul>
-          <button class="pricing-btn outline" id="pro-btn" onclick="startCheckout('pro')">Get Pro</button>
-        </div>
-      </div>
-      <div class="pricing-secure">🔒 Secure payment via Stripe · Cancel anytime</div>
-      <div style="text-align:center; margin-top:16px;">
-        <button onclick="hidePricing()" style="background:none;border:none;font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline;">← Back to analysis</button>
-      </div>
-
-    <!-- PHASE 1 -->
+    <!-- Phase 1: Input -->
     <div id="phase1">
       <div class="sec-label">Step 01</div>
       <div class="sec-title">Add your earnings call</div>
@@ -283,9 +258,7 @@
       </div>
       <div id="panel-audio">
         <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-          <div class="drop-icon">▶</div>
-          <div class="drop-label">Drop audio file or click to browse</div>
-          <div class="drop-hint">MP3 · WAV · M4A · OGG — up to 50MB</div>
+          <div class="drop-icon">▶</div><div class="drop-label">Drop audio file or click to browse</div><div class="drop-hint">MP3 · WAV · M4A · OGG</div>
         </div>
         <input type="file" id="file-input" accept="audio/*" onchange="handleAudio(this)">
       </div>
@@ -294,19 +267,17 @@
       </div>
       <div id="panel-pdf" style="display:none">
         <div class="drop-zone" id="pdf-drop-zone" onclick="document.getElementById('pdf-input').click()">
-          <div class="drop-icon">⬆</div>
-          <div class="drop-label">Drop PDF transcript or click to browse</div>
-          <div class="drop-hint">Seeking Alpha · IR site exports · Investor PDFs</div>
+          <div class="drop-icon">⬆</div><div class="drop-label">Drop PDF transcript or click to browse</div><div class="drop-hint">Seeking Alpha · IR site exports</div>
         </div>
         <input type="file" id="pdf-input" accept="application/pdf" onchange="handlePDF(this)">
       </div>
-      <div class="err" id="input-error">Please provide an audio file, transcript, or PDF to continue.</div>
-      <div class="btn-row" style="justify-content:flex-end; margin-top:28px;">
+      <div class="err" id="input-error">Please provide a file, transcript, or PDF to continue.</div>
+      <div class="btn-row" style="justify-content:flex-end;margin-top:28px;">
         <button class="btn-primary" onclick="goToBriefing()">Continue to Briefing →</button>
       </div>
     </div>
 
-    <!-- PHASE 2 -->
+    <!-- Phase 2: Briefing -->
     <div id="phase2" style="display:none">
       <div class="sec-label">Step 02</div>
       <div class="sec-title">Analyst briefing</div>
@@ -337,7 +308,7 @@
       <div class="err" id="api-error"></div>
     </div>
 
-    <!-- PHASE 3 -->
+    <!-- Phase 3: Loading -->
     <div id="phase3" class="loading">
       <div class="loading-label">Processing</div>
       <div class="loading-title">Analyzing your earnings call…</div>
@@ -345,14 +316,14 @@
       <div class="loading-steps">
         <div class="l-step" id="ls1"><div class="l-marker"></div>Processing content</div>
         <div class="l-step" id="ls2"><div class="l-marker"></div>Tone &amp; sentiment analysis</div>
-        <div class="l-step" id="ls3"><div class="l-marker"></div>Extracting key findings with quotes</div>
+        <div class="l-step" id="ls3"><div class="l-marker"></div>Extracting key findings</div>
         <div class="l-step" id="ls4"><div class="l-marker"></div>Building bull / bear case</div>
-        <div class="l-step" id="ls5"><div class="l-marker"></div>Compiling institutional report</div>
+        <div class="l-step" id="ls5"><div class="l-marker"></div>Compiling report</div>
       </div>
     </div>
 
-    <!-- PHASE 4 -->
-    <div id="phase4" class="report">
+    <!-- Phase 4: Report -->
+    <div id="phase4" style="display:none">
       <div class="report-masthead">
         <div class="report-eyebrow">EarningsEdge — Institutional Analysis Report</div>
         <div class="report-company" id="r-company">—</div>
@@ -370,6 +341,57 @@
     </div>
 
   </div>
+
+  <!-- SCREEN 3: GUEST BLOCK -->
+  <div id="screen-guest-block" class="screen">
+    <div class="gb-icon">🔒</div>
+    <div class="gb-title">Create a free account to continue</div>
+    <div class="gb-sub">You've used your one free guest analysis. Sign up for free to get 3 more analyses — no credit card required.</div>
+    <div class="gb-btns">
+      <button class="btn-primary" onclick="openAuth('signup')">Create Free Account</button>
+      <button class="btn-secondary" onclick="openAuth('login')">Log In</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: PRICING -->
+  <div id="screen-pricing" class="screen">
+    <div class="pricing-header">
+      <div class="pricing-title">Upgrade your plan</div>
+      <div class="pricing-sub">You've used all your free analyses. Upgrade to keep going.</div>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-plan">Starter</div>
+        <div class="pricing-price">$9.99</div>
+        <div class="pricing-period">per month</div>
+        <ul class="pricing-features">
+          <li>20 analyses per month</li>
+          <li>Full institutional report</li>
+          <li>Bull / bear breakdown</li>
+          <li>Tone & credibility scoring</li>
+          <li>Risk flag detection</li>
+        </ul>
+        <button class="pricing-btn" id="starter-btn" onclick="startCheckout('starter')">Get Starter</button>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-price">$19.99</div>
+        <div class="pricing-period">per month</div>
+        <ul class="pricing-features">
+          <li>Unlimited analyses</li>
+          <li>Full institutional report</li>
+          <li>Bull / bear breakdown</li>
+          <li>Tone & credibility scoring</li>
+          <li>Risk flag detection</li>
+        </ul>
+        <button class="pricing-btn outline" id="pro-btn" onclick="startCheckout('pro')">Get Pro</button>
+      </div>
+    </div>
+    <div class="pricing-secure">🔒 Secure payment via Stripe · Cancel anytime</div>
+    <button class="pricing-back" onclick="showScreen('screen-app')">← Back to analysis</button>
+  </div>
+
 </div>
 
 <!-- AUTH MODAL -->
@@ -394,38 +416,33 @@
 </div>
 
 <script>
-// ── Init ──────────────────────────────────────────────────────────────────
-var sb = supabase.createClient('https://rdvguldkjjjmxphpxoov.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkdmd1bGRrampqbXhwaHB4b292Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODQ2NTIsImV4cCI6MjA5ODE2MDY1Mn0.-EeCJ2pYYNtuKDJ0KraPVjyCFeptWj7h5jGL7hhrQNE');
+var sb = supabase.createClient(
+  'https://rdvguldkjjjmxphpxoov.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkdmd1bGRrampqbXhwaHB4b292Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODQ2NTIsImV4cCI6MjA5ODE2MDY1Mn0.-EeCJ2pYYNtuKDJ0KraPVjyCFeptWj7h5jGL7hhrQNE'
+);
 
-var currentSession = null;
-var currentCredits = 0;
-var currentPlan = 'free';
-var guestMode = false;
-var inputMode = 'audio';
-var uploadedFile = null;
-var uploadedPDFBase64 = '';
-var currentReport = null;
+var currentSession = null, currentCredits = 0, currentPlan = 'free', guestMode = false;
+var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
 
-// ── Guest ─────────────────────────────────────────────────────────────────
-function startGuest() {
-  if (localStorage.getItem('ee_guest_used')) {
-    openAuth('signup');
-    return;
-  }
-  guestMode = true;
-  document.getElementById('auth-wall').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+// ── Screen manager ────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen, #screen-wall').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
 }
 
-// ── Auth state ────────────────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────────────────────
 window.addEventListener('load', async function() {
   var result = await sb.auth.getSession();
   if (result.data && result.data.session) {
     await setSession(result.data.session);
+  } else {
+    showScreen('screen-wall');
   }
   sb.auth.onAuthStateChange(async function(event, session) {
     if (event === 'SIGNED_IN' && session) await setSession(session);
-    if (event === 'SIGNED_OUT') showWall();
+    if (event === 'SIGNED_OUT') showScreen('screen-wall');
   });
   var params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
@@ -437,23 +454,27 @@ window.addEventListener('load', async function() {
   }
 });
 
-function showWall() {
-  currentSession = null;
-  guestMode = false;
-  document.getElementById('auth-wall').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('header-email').textContent = '';
-  document.getElementById('header-logout-btn').style.display = 'none';
+// ── Guest mode ────────────────────────────────────────────────────────────
+function startGuest() {
+  if (localStorage.getItem('ee_guest_used')) {
+    showScreen('screen-guest-block');
+    return;
+  }
+  guestMode = true;
+  resetAppPhases();
+  showScreen('screen-app');
 }
 
+// ── Auth ──────────────────────────────────────────────────────────────────
 async function setSession(session) {
   currentSession = session;
-  document.getElementById('auth-wall').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+  guestMode = false;
   document.getElementById('header-email').textContent = session.user.email;
   document.getElementById('header-logout-btn').style.display = 'block';
   closeAuth();
   await refreshProfile();
+  resetAppPhases();
+  showScreen('screen-app');
 }
 
 async function refreshProfile() {
@@ -471,7 +492,6 @@ function updateCreditsBar(credits, plan) {
   currentCredits = credits;
   currentPlan = plan || 'free';
   var isPro = currentPlan === 'pro';
-  var isPaid = currentPlan === 'pro' || currentPlan === 'starter';
   document.getElementById('credits-bar').style.display = 'flex';
   document.getElementById('credits-count').textContent = isPro ? '∞' : credits;
   var badge = document.getElementById('credits-plan-badge');
@@ -480,47 +500,19 @@ function updateCreditsBar(credits, plan) {
   var pct = isPro ? 100 : Math.min(100, (credits / 3) * 100);
   var fill = document.getElementById('credits-fill');
   fill.style.width = pct + '%';
-  fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits <= 2 ? ' warn' : '');
-  document.getElementById('manage-sub-btn').style.display = isPaid ? 'inline' : 'none';
-  // Only show pricing if already on phase1 and credits are 0
-  if (!isPro && credits <= 0 && document.getElementById('phase1').style.display !== 'none') {
-    showPricing();
-  }
+  fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits === 2 ? ' warn' : '');
 }
 
-async function manageSubscription() {
-  var btn = document.getElementById('manage-sub-btn');
-  btn.textContent = 'Loading…';
-  try {
-    var res = await fetch('/api/portal', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token }
-    });
-    var data = await res.json();
-    if (data.url) window.location.href = data.url;
-    else throw new Error(data.error || 'Could not open portal');
-  } catch(e) {
-    alert('Error: ' + e.message);
-  }
-  btn.textContent = 'Manage Plan';
+async function doLogout() {
+  document.getElementById('header-email').textContent = '';
+  document.getElementById('header-logout-btn').style.display = 'none';
+  document.getElementById('credits-bar').style.display = 'none';
+  await sb.auth.signOut();
+  showScreen('screen-wall');
 }
-
-function showPricing() {
-  document.getElementById('pricing-wall').classList.add('show');
-  document.getElementById('phase1').style.display = 'none';
-  document.getElementById('phase2').style.display = 'none';
-}
-
-function hidePricing() {
-  document.getElementById('pricing-wall').classList.remove('show');
-  document.getElementById('phase1').style.display = 'block';
-}
-
-async function doLogout() { await sb.auth.signOut(); }
 
 // ── Auth modal ────────────────────────────────────────────────────────────
 var authMode = 'login';
-
 function openAuth(mode) {
   authMode = mode;
   document.getElementById('auth-modal').classList.add('show');
@@ -535,12 +527,8 @@ function openAuth(mode) {
   document.getElementById('auth-email').value = '';
   document.getElementById('auth-password').value = '';
 }
-
 function closeAuth() { document.getElementById('auth-modal').classList.remove('show'); }
-
-document.getElementById('auth-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeAuth();
-});
+document.getElementById('auth-modal').addEventListener('click', function(e) { if (e.target === this) closeAuth(); });
 
 async function submitAuth() {
   var btn = document.getElementById('auth-submit-btn');
@@ -561,17 +549,14 @@ async function submitAuth() {
       var r = await sb.auth.signInWithPassword({ email: email, password: password });
       if (r.error) throw r.error;
     }
-  } catch(e) {
-    errEl.textContent = e.message; errEl.classList.add('show');
-  }
+  } catch(e) { errEl.textContent = e.message; errEl.classList.add('show'); }
   btn.disabled = false; btn.textContent = authMode === 'login' ? 'Log In' : 'Create Account';
 }
 
 // ── Checkout ──────────────────────────────────────────────────────────────
 async function startCheckout(plan) {
   if (!currentSession) { openAuth('login'); return; }
-  var btnId = plan === 'pro' ? 'pro-btn' : 'starter-btn';
-  var btn = document.getElementById(btnId);
+  var btn = document.getElementById(plan === 'pro' ? 'pro-btn' : 'starter-btn');
   btn.disabled = true; btn.textContent = 'Redirecting…';
   try {
     var res = await fetch('/api/checkout', {
@@ -588,7 +573,7 @@ async function startCheckout(plan) {
   }
 }
 
-// ── App tabs ──────────────────────────────────────────────────────────────
+// ── App phases ────────────────────────────────────────────────────────────
 function switchTab(m) {
   inputMode = m;
   ['audio','text','pdf'].forEach(function(t) {
@@ -631,8 +616,10 @@ function handlePDF(inp) {
 });
 
 function goToBriefing() {
-  if (!guestMode && currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
-  document.getElementById('pricing-wall').classList.remove('show');
+  // Check credits for logged-in users
+  if (!guestMode && currentSession && currentPlan !== 'pro' && currentCredits <= 0) {
+    showScreen('screen-pricing'); return;
+  }
   var err = document.getElementById('input-error');
   var t = document.getElementById('transcript-input').value.trim();
   if (inputMode==='audio' && !uploadedFile) { err.classList.add('show'); return; }
@@ -667,7 +654,9 @@ function setLoadingStep(si) {
 }
 
 async function runAnalysis() {
-  if (!guestMode && currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
+  if (!guestMode && currentSession && currentPlan !== 'pro' && currentCredits <= 0) {
+    showScreen('screen-pricing'); return;
+  }
   var btn=document.getElementById('run-btn'), apiErr=document.getElementById('api-error');
   apiErr.classList.remove('show');
   var company=document.getElementById('q-company').value.trim()||'Unknown Company';
@@ -694,26 +683,27 @@ async function runAnalysis() {
     messages=[{role:'user',content:ctx+'\n\n'+schema+'\n\nEARNINGS CALL:\n'+callContent.slice(0,9000)}];
   }
   try {
-    var headers = {'Content-Type':'application/json'};
-    if (!guestMode && currentSession) headers['Authorization'] = 'Bearer ' + currentSession.access_token;
-    var res = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify({ messages: messages, guest: guestMode })
-    });
+    var headers={'Content-Type':'application/json'};
+    if (!guestMode && currentSession) headers['Authorization']='Bearer '+currentSession.access_token;
+    var res=await fetch('/api/analyze',{method:'POST',headers:headers,body:JSON.stringify({messages:messages,guest:guestMode})});
     clearInterval(stepInt);
-    var data = await res.json();
-    if (res.status === 402) { showPricing(); document.getElementById('phase3').classList.remove('show'); document.getElementById('phase1').style.display='block'; setStep(1); btn.disabled=false; btn.textContent='Run Analysis →'; return; }
-    if (!res.ok) throw new Error(data.error || 'HTTP '+res.status);
-    if (!guestMode) updateCreditsBar(data.credits, data.plan);
+    var data=await res.json();
+    if (res.status===402){showScreen('screen-pricing');document.getElementById('phase3').classList.remove('show');document.getElementById('phase2').style.display='block';setStep(2);btn.disabled=false;btn.textContent='Run Analysis →';return;}
+    if (!res.ok) throw new Error(data.error||'HTTP '+res.status);
+    if (!guestMode && data.credits !== undefined) updateCreditsBar(data.credits, data.plan);
+    var wasGuest=guestMode; guestMode=false;
+    if (wasGuest) localStorage.setItem('ee_guest_used','1');
     setLoadingStep(5);
-    var wasGuest = guestMode;
-    guestMode = false;
-    if (wasGuest) localStorage.setItem('ee_guest_used', '1');
     setTimeout(function(){
+      document.getElementById('phase3').classList.remove('show');
+      document.getElementById('phase4').style.display='block';
+      setStep(4);
       renderReport(data.result);
-      if (wasGuest) showSignupBanner();
-    }, 400);
+      if (wasGuest) showScreen('screen-app'); // stays on app showing report
+    },400);
+    if (wasGuest) {
+      setTimeout(function(){ showGuestBanner(); }, 1200);
+    }
   } catch(e) {
     clearInterval(stepInt);
     document.getElementById('phase3').classList.remove('show');
@@ -724,21 +714,24 @@ async function runAnalysis() {
   }
 }
 
-function showSignupBanner() {
-  var b = document.createElement('div');
-  b.id = 'signup-banner';
-  b.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;color:#fff;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;z-index:50;gap:20px;';
-  b.innerHTML = '<div><div style="font-family:\'Playfair Display\',serif;font-size:16px;font-weight:700;margin-bottom:4px;">Liked what you saw?</div><div style="font-size:12px;color:#aaa;">Create a free account to get 3 more analyses — no credit card needed.</div></div><div style="display:flex;gap:10px;flex-shrink:0;"><button onclick="document.getElementById(\'signup-banner\').remove()" style="background:transparent;color:#aaa;border:1px solid #444;padding:10px 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Maybe later</button><button onclick="openAuth(\'signup\');document.getElementById(\'signup-banner\').remove()" style="background:#c9a84c;color:#000;border:none;padding:10px 20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Create Free Account</button></div>';
+function showGuestBanner() {
+  var b=document.createElement('div');
+  b.id='guest-banner';
+  b.style.cssText='position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;color:#fff;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;z-index:50;gap:20px;';
+  b.innerHTML='<div><div style="font-family:\'Playfair Display\',serif;font-size:16px;font-weight:700;margin-bottom:4px;">Liked what you saw?</div><div style="font-size:12px;color:#aaa;">Create a free account to get 3 more analyses — no credit card needed.</div></div><div style="display:flex;gap:10px;flex-shrink:0;"><button onclick="dismissGuestBanner(false)" style="background:transparent;color:#aaa;border:1px solid #444;padding:10px 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Maybe later</button><button onclick="dismissGuestBanner(true)" style="background:#c9a84c;color:#000;border:none;padding:10px 20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Create Free Account</button></div>';
   document.body.appendChild(b);
 }
 
-function scoreColor(v){ return v>=70?'var(--green)':v>=40?'var(--gold)':'var(--red)'; }
+function dismissGuestBanner(signup) {
+  var b=document.getElementById('guest-banner');
+  if (b) b.remove();
+  if (signup) openAuth('signup');
+  else showScreen('screen-guest-block');
+}
+
+function scoreColor(v){return v>=70?'var(--green)':v>=40?'var(--gold)':'var(--red)';}
 
 function renderReport(d) {
-  currentReport=d;
-  document.getElementById('phase3').classList.remove('show');
-  document.getElementById('phase4').classList.add('show');
-  setStep(4);
   document.getElementById('r-company').textContent=d.company||'—';
   document.getElementById('r-ticker').textContent=d.ticker||'—';
   document.getElementById('r-quarter').textContent=d.quarter||'—';
@@ -753,12 +746,13 @@ function renderReport(d) {
   document.getElementById('r-sections').innerHTML=html;
 }
 
-function newAnalysis() {
-  currentReport=null;
-  document.getElementById('phase4').classList.remove('show');
-  document.getElementById('phase1').style.display='block';
+function resetAppPhases() {
   setStep(1);
-  inputMode='audio'; uploadedFile=null; uploadedPDFBase64='';
+  document.getElementById('phase1').style.display='block';
+  document.getElementById('phase2').style.display='none';
+  document.getElementById('phase3').classList.remove('show');
+  document.getElementById('phase4').style.display='none';
+  uploadedFile=null; uploadedPDFBase64=''; inputMode='audio';
   document.getElementById('transcript-input').value='';
   document.getElementById('drop-zone').className='drop-zone';
   document.getElementById('drop-zone').innerHTML='<div class="drop-icon">▶</div><div class="drop-label">Drop audio file or click to browse</div><div class="drop-hint">MP3 · WAV · M4A · OGG</div>';
@@ -769,6 +763,13 @@ function newAnalysis() {
   document.getElementById('q-stance').value='';
   document.getElementById('run-btn').disabled=false;
   document.getElementById('run-btn').textContent='Run Analysis →';
+}
+
+function newAnalysis() {
+  if (!guestMode && currentSession && currentPlan !== 'pro' && currentCredits <= 0) {
+    showScreen('screen-pricing'); return;
+  }
+  resetAppPhases();
 }
 </script>
 </body>
