@@ -16,15 +16,22 @@ export default async function handler(req, res) {
   const { data: { user }, error } = await supabase.auth.getUser(token);
   if (error || !user) return res.status(401).json({ error: 'Invalid session' });
 
+  const { plan } = req.body;
+  const priceId = plan === 'pro'
+    ? process.env.STRIPE_PRO_PRICE_ID
+    : process.env.STRIPE_STARTER_PRICE_ID;
+
+  if (!priceId) return res.status(400).json({ error: 'Invalid plan' });
+
   try {
     const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
+      mode: 'subscription',
       payment_method_types: ['card'],
-      line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
+      line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_URL}?payment=success`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL}?payment=cancelled`,
       customer_email: user.email,
-      metadata: { user_id: user.id }
+      metadata: { user_id: user.id, plan }
     });
     return res.status(200).json({ url: session.url });
   } catch(e) {
