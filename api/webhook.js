@@ -48,11 +48,11 @@ export default async function handler(req, res) {
   }
 
   if (event.type === 'invoice.paid') {
-    // Monthly renewal — reset credits
+    // Monthly renewal — only reset credits for paid plans, never for free
     const customerId = session.customer;
     const { data: profile } = await supabase
       .from('profiles').select('plan').eq('stripe_customer_id', customerId).single();
-    if (profile) {
+    if (profile && profile.plan !== 'free') {
       const credits = profile.plan === 'pro' ? 999999 : 20;
       await supabase.from('profiles').update({
         credits,
