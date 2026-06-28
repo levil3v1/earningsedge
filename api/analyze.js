@@ -44,10 +44,15 @@ export default async function handler(req, res) {
   const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
   if (authErr || !user) return res.status(401).json({ error: 'Session expired. Please log in again.' });
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles').select('credits, plan').eq('id', user.id).single();
+
+  console.log('Profile:', profile, 'Error:', profileError);
+
   const credits = profile?.credits ?? 0;
   const plan = profile?.plan ?? 'free';
+
+  console.log('Credits:', credits, 'Plan:', plan);
 
   if (plan !== 'pro' && credits <= 0) {
     return res.status(402).json({ error: 'no_credits', credits: 0 });
