@@ -477,12 +477,15 @@ function updateCreditsBar(credits, plan) {
   var badge = document.getElementById('credits-plan-badge');
   badge.textContent = isPro ? 'Pro' : currentPlan === 'starter' ? 'Starter' : 'Free';
   badge.className = 'credits-plan ' + currentPlan;
-  var pct = isPro ? 100 : Math.min(100, (credits / 20) * 100);
+  var pct = isPro ? 100 : Math.min(100, (credits / 3) * 100);
   var fill = document.getElementById('credits-fill');
   fill.style.width = pct + '%';
-  fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits <= 5 ? ' warn' : '');
+  fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits <= 2 ? ' warn' : '');
   document.getElementById('manage-sub-btn').style.display = isPaid ? 'inline' : 'none';
-  if (!isPro && credits <= 0) showPricing();
+  // Only show pricing if already on phase1 and credits are 0
+  if (!isPro && credits <= 0 && document.getElementById('phase1').style.display !== 'none') {
+    showPricing();
+  }
 }
 
 async function manageSubscription() {
