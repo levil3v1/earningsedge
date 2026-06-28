@@ -425,6 +425,7 @@ var sb = supabase.createClient(
 );
 
 var currentSession = null, currentCredits = 0, currentPlan = 'free', guestMode = false;
+var profileLoaded = false;
 var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
 
 // ── Screen manager ────────────────────────────────────────────────────────
@@ -496,7 +497,7 @@ async function refreshProfile() {
     body: JSON.stringify({ action: 'profile' })
   });
   var data = await res.json();
-  if (data.profile) updateCreditsBar(data.profile.credits, data.profile.plan);
+  if (data.profile) { updateCreditsBar(data.profile.credits, data.profile.plan); profileLoaded = true; }
 }
 
 function updateCreditsBar(credits, plan) {
@@ -690,7 +691,7 @@ function setLoadingStep(si) {
 }
 
 async function runAnalysis() {
-  if (!guestMode && currentSession && currentPlan !== 'pro' && currentCredits <= 0) {
+  if (!guestMode && currentSession && profileLoaded && currentPlan !== 'pro' && currentCredits <= 0) {
     showScreen('screen-pricing'); return;
   }
   var btn=document.getElementById('run-btn'), apiErr=document.getElementById('api-error');
