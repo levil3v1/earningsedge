@@ -24,17 +24,16 @@
   .header-user { font-size: 11px; color: #aaa; }
   .header-btn { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 6px 14px; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
   .header-btn-ghost { background: transparent; color: #c9a84c; border: 1px solid #c9a84c44; }
-  .header-btn-solid { background: #c9a84c; color: #000; }
   .main { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
 
   /* AUTH WALL */
-  .auth-wall { display: none; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
-  .auth-wall.show { display: flex !important; }
+  #auth-wall { display: flex; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
   .auth-wall-icon { font-size: 40px; margin-bottom: 20px; }
   .auth-wall-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
   .auth-wall-sub { font-size: 14px; color: var(--ink3); max-width: 420px; margin: 0 auto 36px; line-height: 1.7; }
   .auth-wall-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
-  .auth-wall-note { font-size: 11px; color: var(--muted); }
+  .auth-wall-note { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
+  .try-link { background: none; border: none; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; }
 
   /* AUTH MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
@@ -48,7 +47,6 @@
   .modal-input { background: var(--white); border: 1px solid var(--rule); color: var(--ink); font-size: 13px; padding: 11px 14px; outline: none; font-family: 'Inter', sans-serif; width: 100%; }
   .modal-input:focus { border-color: var(--ink); }
   .modal-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 13px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 8px; }
-  .modal-btn:hover { background: var(--ink2); }
   .modal-btn:disabled { background: var(--muted); cursor: not-allowed; }
   .modal-switch { text-align: center; margin-top: 20px; font-size: 12px; color: var(--ink3); }
   .modal-switch a { color: var(--gold); cursor: pointer; text-decoration: underline; }
@@ -71,12 +69,10 @@
   .pricing-period { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
   .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
   .pricing-features li { font-size: 12px; color: var(--ink2); display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
-  .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
   .pricing-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 13px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
-  .pricing-btn:hover { background: var(--ink2); }
-  .pricing-btn:disabled { background: var(--muted); cursor: not-allowed; }
   .pricing-btn.outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
-  .pricing-btn.outline:hover { background: var(--ink); color: #fff; }
+  .pricing-btn:disabled { background: var(--muted); cursor: not-allowed; }
   .pricing-secure { text-align: center; font-size: 11px; color: var(--muted); }
 
   /* CREDITS BAR */
@@ -107,7 +103,6 @@
   .rule { border: none; border-top: 1px solid var(--rule); margin: 24px 0; }
   .tabs { display: flex; border-bottom: 2px solid var(--ink); margin-bottom: 24px; }
   .tab { padding: 10px 20px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
-  .tab:hover { color: var(--ink); }
   .tab.active { color: var(--ink); border-bottom-color: var(--ink); }
   .drop-zone { border: 1px dashed var(--rule); background: var(--paper); padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.15s; color: var(--muted); }
   .drop-zone:hover, .drop-zone.dragover { border-color: var(--gold); background: var(--gold-bg); color: var(--gold); }
@@ -126,13 +121,12 @@
   .field-input:focus { border-color: var(--ink); }
   .field-input::placeholder { color: var(--muted); }
   select.field-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
-  .btn-primary { background: var(--ink); color: #fff; border: none; padding: 13px 28px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: background 0.15s; font-family: 'Inter', sans-serif; }
-  .btn-primary:hover { background: var(--ink2); }
+  .btn-primary { background: var(--ink); color: #fff; border: none; padding: 13px 28px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
   .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
-  .btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 12px 24px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 12px 24px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
   .btn-secondary:hover { background: var(--ink); color: #fff; }
   .btn-row { display: flex; gap: 12px; align-items: center; margin-top: 32px; flex-wrap: wrap; }
-  .err { background: var(--red-bg); border-left: 3px solid var(--red); padding: 12px 16px; font-size: 12px; color: var(--red); margin-top: 16px; display: none; line-height: 1.5; }
+  .err { background: var(--red-bg); border-left: 3px solid var(--red); padding: 12px 16px; font-size: 12px; color: var(--red); margin-top: 16px; display: none; }
   .err.show { display: block; }
   .loading { display: none; padding: 80px 20px; text-align: center; }
   .loading.show { display: block; }
@@ -193,14 +187,14 @@
   </div>
   <div class="header-right">
     <span class="header-user" id="header-email"></span>
-    <button class="header-btn header-btn-ghost" id="header-logout-btn" onclick="logout()" style="display:none">Log Out</button>
+    <button class="header-btn header-btn-ghost" id="header-logout-btn" onclick="doLogout()" style="display:none">Log Out</button>
   </div>
 </div>
 
 <div class="main">
 
   <!-- AUTH WALL -->
-  <div class="auth-wall" id="auth-wall" style="display:flex">
+  <div id="auth-wall">
     <div class="auth-wall-icon">📊</div>
     <div class="auth-wall-title">Institutional earnings analysis, powered by AI.</div>
     <div class="auth-wall-sub">EarningsEdge reads between the lines of any earnings call — from tone to executive statements — so you always know what's really being said.</div>
@@ -209,15 +203,13 @@
       <button class="btn-secondary" onclick="openAuth('login')">Log In</button>
     </div>
     <div class="auth-wall-note">3 free analyses included. No credit card required.</div>
-    <div style="margin-top: 24px;">
-      <button style="background:none;border:none;font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline;" onclick="tryWithoutAccount()">Try one analysis without an account →</button>
-    </div>
+    <button class="try-link" onclick="startGuest()">Try one analysis without an account →</button>
   </div>
 
   <!-- APP -->
   <div id="app" style="display:none">
 
-    <div class="stepbar" id="stepbar">
+    <div class="stepbar">
       <div class="sb-item active" id="step1"><div class="sb-num">1</div><span>Input</span></div>
       <div class="sb-line"></div>
       <div class="sb-item" id="step2"><div class="sb-num">2</div><span>Briefing</span></div>
@@ -254,7 +246,7 @@
             <li>Tone & credibility scoring</li>
             <li>Risk flag detection</li>
           </ul>
-          <button class="pricing-btn" onclick="startCheckout('starter')">Get Starter</button>
+          <button class="pricing-btn" id="starter-btn" onclick="startCheckout('starter')">Get Starter</button>
         </div>
         <div class="pricing-card">
           <div class="pricing-plan">Pro</div>
@@ -267,7 +259,7 @@
             <li>Tone & credibility scoring</li>
             <li>Risk flag detection</li>
           </ul>
-          <button class="pricing-btn outline" onclick="startCheckout('pro')">Get Pro</button>
+          <button class="pricing-btn outline" id="pro-btn" onclick="startCheckout('pro')">Get Pro</button>
         </div>
       </div>
       <div class="pricing-secure">🔒 Secure payment via Stripe · Cancel anytime</div>
@@ -275,11 +267,9 @@
 
     <!-- PHASE 1 -->
     <div id="phase1">
-      <div class="sec-header">
-        <div class="sec-label">Step 01</div>
-        <div class="sec-title">Add your earnings call</div>
-        <div class="sec-sub">Upload an audio recording, paste a transcript, or drop in a PDF.</div>
-      </div>
+      <div class="sec-label">Step 01</div>
+      <div class="sec-title">Add your earnings call</div>
+      <div class="sec-sub">Upload an audio recording, paste a transcript, or drop in a PDF.</div>
       <hr class="rule">
       <div class="tabs">
         <button class="tab active" id="tab-audio" onclick="switchTab('audio')">Audio File</button>
@@ -313,11 +303,9 @@
 
     <!-- PHASE 2 -->
     <div id="phase2" style="display:none">
-      <div class="sec-header">
-        <div class="sec-label">Step 02</div>
-        <div class="sec-title">Analyst briefing</div>
-        <div class="sec-sub">Define your focus before the analysis runs.</div>
-      </div>
+      <div class="sec-label">Step 02</div>
+      <div class="sec-title">Analyst briefing</div>
+      <div class="sec-sub">Define your focus before the analysis runs.</div>
       <hr class="rule">
       <div class="field-grid">
         <div class="field"><div class="field-label">Company name</div><input class="field-input" id="q-company" type="text" placeholder="e.g. Rolls-Royce Holdings plc"></div>
@@ -401,20 +389,30 @@
 </div>
 
 <script>
-var SUPABASE_URL = 'https://rdvguldkjjjmxphpxoov.supabase.co';
-var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkdmd1bGRrampqbXhwaHB4b292Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODQ2NTIsImV4cCI6MjA5ODE2MDY1Mn0.-EeCJ2pYYNtuKDJ0KraPVjyCFeptWj7h5jGL7hhrQNE';
-var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ── Init ──────────────────────────────────────────────────────────────────
+var sb = supabase.createClient('https://rdvguldkjjjmxphpxoov.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkdmd1bGRrampqbXhwaHB4b292Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODQ2NTIsImV4cCI6MjA5ODE2MDY1Mn0.-EeCJ2pYYNtuKDJ0KraPVjyCFeptWj7h5jGL7hhrQNE');
 
-var currentSession = null, currentCredits = 0, currentPlan = 'free';
-var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
-var guestMode = false, guestUsed = false;
+var currentSession = null;
+var currentCredits = 0;
+var currentPlan = 'free';
+var guestMode = false;
+var inputMode = 'audio';
+var uploadedFile = null;
+var uploadedPDFBase64 = '';
+var currentReport = null;
 
+// ── Guest ─────────────────────────────────────────────────────────────────
+function startGuest() {
+  guestMode = true;
+  document.getElementById('auth-wall').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+// ── Auth state ────────────────────────────────────────────────────────────
 window.addEventListener('load', async function() {
   var result = await sb.auth.getSession();
-  if (result.data.session) {
+  if (result.data && result.data.session) {
     await setSession(result.data.session);
-  } else {
-    showWall();
   }
   sb.auth.onAuthStateChange(async function(event, session) {
     if (event === 'SIGNED_IN' && session) await setSession(session);
@@ -432,7 +430,8 @@ window.addEventListener('load', async function() {
 
 function showWall() {
   currentSession = null;
-  document.getElementById('auth-wall').classList.add('show');
+  guestMode = false;
+  document.getElementById('auth-wall').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
   document.getElementById('header-email').textContent = '';
   document.getElementById('header-logout-btn').style.display = 'none';
@@ -462,28 +461,26 @@ async function refreshProfile() {
 function updateCreditsBar(credits, plan) {
   currentCredits = credits;
   currentPlan = plan || 'free';
-  var bar = document.getElementById('credits-bar');
-  var count = document.getElementById('credits-count');
-  var fill = document.getElementById('credits-fill');
-  var badge = document.getElementById('credits-plan-badge');
-  bar.style.display = 'flex';
   var isPro = currentPlan === 'pro';
-  count.textContent = isPro ? '∞' : credits;
-  badge.textContent = currentPlan === 'pro' ? 'Pro' : currentPlan === 'starter' ? 'Starter' : 'Free';
+  document.getElementById('credits-bar').style.display = 'flex';
+  document.getElementById('credits-count').textContent = isPro ? '∞' : credits;
+  var badge = document.getElementById('credits-plan-badge');
+  badge.textContent = isPro ? 'Pro' : currentPlan === 'starter' ? 'Starter' : 'Free';
   badge.className = 'credits-plan ' + currentPlan;
   var pct = isPro ? 100 : Math.min(100, (credits / 20) * 100);
+  var fill = document.getElementById('credits-fill');
   fill.style.width = pct + '%';
   fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits <= 5 ? ' warn' : '');
   if (!isPro && credits <= 0) showPricing();
 }
 
 function showPricing() { document.getElementById('pricing-wall').classList.add('show'); }
-function hidePricing() { document.getElementById('pricing-wall').classList.remove('show'); }
 
-async function logout() { await sb.auth.signOut(); showWall(); }
+async function doLogout() { await sb.auth.signOut(); }
 
-// AUTH MODAL
+// ── Auth modal ────────────────────────────────────────────────────────────
 var authMode = 'login';
+
 function openAuth(mode) {
   authMode = mode;
   document.getElementById('auth-modal').classList.add('show');
@@ -498,8 +495,12 @@ function openAuth(mode) {
   document.getElementById('auth-email').value = '';
   document.getElementById('auth-password').value = '';
 }
+
 function closeAuth() { document.getElementById('auth-modal').classList.remove('show'); }
-document.getElementById('auth-modal').addEventListener('click', function(e) { if (e.target === this) closeAuth(); });
+
+document.getElementById('auth-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeAuth();
+});
 
 async function submitAuth() {
   var btn = document.getElementById('auth-submit-btn');
@@ -512,13 +513,13 @@ async function submitAuth() {
   btn.disabled = true; btn.textContent = authMode === 'login' ? 'Logging in…' : 'Creating account…';
   try {
     if (authMode === 'signup') {
-      var res = await sb.auth.signUp({ email: email, password: password });
-      if (res.error) throw res.error;
+      var r = await sb.auth.signUp({ email: email, password: password });
+      if (r.error) throw r.error;
       okEl.textContent = 'Account created! Check your email to confirm, then log in.';
       okEl.classList.add('show');
     } else {
-      var res = await sb.auth.signInWithPassword({ email: email, password: password });
-      if (res.error) throw res.error;
+      var r = await sb.auth.signInWithPassword({ email: email, password: password });
+      if (r.error) throw r.error;
     }
   } catch(e) {
     errEl.textContent = e.message; errEl.classList.add('show');
@@ -526,11 +527,12 @@ async function submitAuth() {
   btn.disabled = false; btn.textContent = authMode === 'login' ? 'Log In' : 'Create Account';
 }
 
-// CHECKOUT
+// ── Checkout ──────────────────────────────────────────────────────────────
 async function startCheckout(plan) {
   if (!currentSession) { openAuth('login'); return; }
-  var btn = document.querySelector('.pricing-btn[onclick="startCheckout(\'' + plan + '\')"]');
-  if (btn) { btn.disabled = true; btn.textContent = 'Redirecting…'; }
+  var btnId = plan === 'pro' ? 'pro-btn' : 'starter-btn';
+  var btn = document.getElementById(btnId);
+  btn.disabled = true; btn.textContent = 'Redirecting…';
   try {
     var res = await fetch('/api/checkout', {
       method: 'POST',
@@ -542,11 +544,11 @@ async function startCheckout(plan) {
     else throw new Error(data.error || 'Checkout failed');
   } catch(e) {
     alert('Error: ' + e.message);
-    if (btn) { btn.disabled = false; btn.textContent = plan === 'pro' ? 'Get Pro' : 'Get Starter'; }
+    btn.disabled = false; btn.textContent = plan === 'pro' ? 'Get Pro' : 'Get Starter';
   }
 }
 
-// APP
+// ── App tabs ──────────────────────────────────────────────────────────────
 function switchTab(m) {
   inputMode = m;
   ['audio','text','pdf'].forEach(function(t) {
@@ -589,14 +591,14 @@ function handlePDF(inp) {
 });
 
 function goToBriefing() {
-  if (currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
+  if (!guestMode && currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
   var err = document.getElementById('input-error');
   var t = document.getElementById('transcript-input').value.trim();
   if (inputMode==='audio' && !uploadedFile) { err.classList.add('show'); return; }
   if (inputMode==='text' && !t) { err.classList.add('show'); return; }
   if (inputMode==='pdf' && !uploadedPDFBase64) { err.classList.add('show'); err.textContent='Please wait for the PDF to load.'; return; }
   err.classList.remove('show');
-  hidePricing();
+  document.getElementById('pricing-wall').classList.remove('show');
   setStep(2);
   document.getElementById('phase1').style.display='none';
   document.getElementById('phase2').style.display='block';
@@ -652,7 +654,7 @@ async function runAnalysis() {
     messages=[{role:'user',content:ctx+'\n\n'+schema+'\n\nEARNINGS CALL:\n'+callContent.slice(0,9000)}];
   }
   try {
-    var headers = { 'Content-Type': 'application/json' };
+    var headers = {'Content-Type':'application/json'};
     if (!guestMode && currentSession) headers['Authorization'] = 'Bearer ' + currentSession.access_token;
     var res = await fetch('/api/analyze', {
       method: 'POST',
@@ -665,9 +667,11 @@ async function runAnalysis() {
     if (!res.ok) throw new Error(data.error || 'HTTP '+res.status);
     if (!guestMode) updateCreditsBar(data.credits, data.plan);
     setLoadingStep(5);
+    var wasGuest = guestMode;
+    guestMode = false;
     setTimeout(function(){
       renderReport(data.result);
-      if (guestMode) { guestUsed = true; guestMode = false; showSignupPrompt(); }
+      if (wasGuest) showSignupBanner();
     }, 400);
   } catch(e) {
     clearInterval(stepInt);
@@ -679,17 +683,12 @@ async function runAnalysis() {
   }
 }
 
-function showSignupPrompt() {
-  var banner = document.createElement('div');
-  banner.id = 'signup-banner';
-  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:var(--ink);color:#fff;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;z-index:50;';
-  banner.innerHTML = '<div><div style="font-family:\'Playfair Display\',serif;font-size:16px;font-weight:700;margin-bottom:4px;">Liked what you saw?</div><div style="font-size:12px;color:#aaa;">Create a free account to get 3 more analyses — no credit card needed.</div></div><div style="display:flex;gap:10px;flex-shrink:0;"><button onclick="dismissBanner()" style="background:transparent;color:#aaa;border:1px solid #444;padding:10px 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Maybe later</button><button onclick="openAuth(\'signup\');dismissBanner()" style="background:#c9a84c;color:#000;border:none;padding:10px 20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Create Free Account</button></div>';
-  document.body.appendChild(banner);
-}
-
-function dismissBanner() {
-  var b = document.getElementById('signup-banner');
-  if (b) b.remove();
+function showSignupBanner() {
+  var b = document.createElement('div');
+  b.id = 'signup-banner';
+  b.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;color:#fff;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;z-index:50;gap:20px;';
+  b.innerHTML = '<div><div style="font-family:\'Playfair Display\',serif;font-size:16px;font-weight:700;margin-bottom:4px;">Liked what you saw?</div><div style="font-size:12px;color:#aaa;">Create a free account to get 3 more analyses — no credit card needed.</div></div><div style="display:flex;gap:10px;flex-shrink:0;"><button onclick="document.getElementById(\'signup-banner\').remove()" style="background:transparent;color:#aaa;border:1px solid #444;padding:10px 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Maybe later</button><button onclick="openAuth(\'signup\');document.getElementById(\'signup-banner\').remove()" style="background:#c9a84c;color:#000;border:none;padding:10px 20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Create Free Account</button></div>';
+  document.body.appendChild(b);
 }
 
 function scoreColor(v){ return v>=70?'var(--green)':v>=40?'var(--gold)':'var(--red)'; }
@@ -727,7 +726,8 @@ function newAnalysis() {
   switchTab('audio');
   ['q-company','q-ticker','q-quarter','q-expectations','q-themes','q-executives'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('q-stance').value='';
-  document.getElementById('run-btn').disabled=false; document.getElementById('run-btn').textContent='Run Analysis →';
+  document.getElementById('run-btn').disabled=false;
+  document.getElementById('run-btn').textContent='Run Analysis →';
 }
 </script>
 </body>
