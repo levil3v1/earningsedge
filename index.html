@@ -433,6 +433,13 @@ function showScreen(id) {
     el.classList.remove('active');
   });
   document.getElementById(id).classList.add('active');
+  // Always reset pricing buttons when showing pricing screen
+  if (id === 'screen-pricing') {
+    document.getElementById('starter-btn').disabled = false;
+    document.getElementById('starter-btn').textContent = 'Get Starter';
+    document.getElementById('pro-btn').disabled = false;
+    document.getElementById('pro-btn').textContent = 'Get Pro';
+  }
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────
@@ -582,7 +589,9 @@ async function submitAuth() {
 async function startCheckout(plan) {
   if (!currentSession) { openAuth('login'); return; }
   var btn = document.getElementById(plan === 'pro' ? 'pro-btn' : 'starter-btn');
+  var otherBtn = document.getElementById(plan === 'pro' ? 'starter-btn' : 'pro-btn');
   btn.disabled = true; btn.textContent = 'Redirecting…';
+  otherBtn.disabled = true;
   try {
     var res = await fetch('/api/checkout', {
       method: 'POST',
@@ -590,12 +599,14 @@ async function startCheckout(plan) {
       body: JSON.stringify({ plan: plan })
     });
     var data = await res.json();
-    if (data.url) window.location.href = data.url;
+    if (data.url) { window.location.href = data.url; return; }
     else throw new Error(data.error || 'Checkout failed');
   } catch(e) {
     alert('Error: ' + e.message);
-    btn.disabled = false; btn.textContent = plan === 'pro' ? 'Get Pro' : 'Get Starter';
   }
+  // Reset both buttons if we didn't redirect
+  btn.disabled = false; btn.textContent = plan === 'pro' ? 'Get Pro' : 'Get Starter';
+  otherBtn.disabled = false; otherBtn.textContent = plan === 'pro' ? 'Get Starter' : 'Get Pro';
 }
 
 // ── App phases ────────────────────────────────────────────────────────────
