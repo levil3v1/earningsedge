@@ -226,7 +226,10 @@
         <span class="credits-plan free" id="credits-plan-badge">Free</span>
       </div>
       <div class="credits-track"><div class="credits-fill" id="credits-fill" style="width:0%"></div></div>
-      <button class="credits-upgrade" onclick="showPricing()">Upgrade →</button>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <button class="credits-upgrade" id="manage-sub-btn" onclick="manageSubscription()" style="display:none">Manage Plan</button>
+        <button class="credits-upgrade" onclick="showPricing()">Upgrade →</button>
+      </div>
     </div>
 
     <!-- PRICING WALL -->
@@ -403,6 +406,10 @@ var currentReport = null;
 
 // ── Guest ─────────────────────────────────────────────────────────────────
 function startGuest() {
+  if (localStorage.getItem('ee_guest_used')) {
+    openAuth('signup');
+    return;
+  }
   guestMode = true;
   document.getElementById('auth-wall').style.display = 'none';
   document.getElementById('app').style.display = 'block';
@@ -462,6 +469,7 @@ function updateCreditsBar(credits, plan) {
   currentCredits = credits;
   currentPlan = plan || 'free';
   var isPro = currentPlan === 'pro';
+  var isPaid = currentPlan === 'pro' || currentPlan === 'starter';
   document.getElementById('credits-bar').style.display = 'flex';
   document.getElementById('credits-count').textContent = isPro ? '∞' : credits;
   var badge = document.getElementById('credits-plan-badge');
@@ -471,7 +479,25 @@ function updateCreditsBar(credits, plan) {
   var fill = document.getElementById('credits-fill');
   fill.style.width = pct + '%';
   fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits <= 5 ? ' warn' : '');
+  document.getElementById('manage-sub-btn').style.display = isPaid ? 'inline' : 'none';
   if (!isPro && credits <= 0) showPricing();
+}
+
+async function manageSubscription() {
+  var btn = document.getElementById('manage-sub-btn');
+  btn.textContent = 'Loading…';
+  try {
+    var res = await fetch('/api/portal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token }
+    });
+    var data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else throw new Error(data.error || 'Could not open portal');
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+  btn.textContent = 'Manage Plan';
 }
 
 function showPricing() { document.getElementById('pricing-wall').classList.add('show'); }
@@ -669,6 +695,7 @@ async function runAnalysis() {
     setLoadingStep(5);
     var wasGuest = guestMode;
     guestMode = false;
+    if (wasGuest) localStorage.setItem('ee_guest_used', '1');
     setTimeout(function(){
       renderReport(data.result);
       if (wasGuest) showSignupBanner();
