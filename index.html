@@ -235,7 +235,7 @@
     <!-- PRICING WALL -->
     <div class="pricing-wall" id="pricing-wall">
       <div class="pricing-title">Upgrade your plan</div>
-      <div class="pricing-sub">Choose the plan that fits how often you analyse earnings calls.</div>
+      <div class="pricing-sub">You've used all your free analyses. Upgrade to keep going.</div>
       <div class="pricing-grid">
         <div class="pricing-card featured">
           <div class="pricing-badge">Most Popular</div>
@@ -500,7 +500,11 @@ async function manageSubscription() {
   btn.textContent = 'Manage Plan';
 }
 
-function showPricing() { document.getElementById('pricing-wall').classList.add('show'); }
+function showPricing() {
+  document.getElementById('pricing-wall').classList.add('show');
+  document.getElementById('phase1').style.display = 'none';
+  document.getElementById('phase2').style.display = 'none';
+}
 
 async function doLogout() { await sb.auth.signOut(); }
 
