@@ -622,13 +622,13 @@ function handlePDF(inp) {
 
 function goToBriefing() {
   if (!guestMode && currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
+  document.getElementById('pricing-wall').classList.remove('show');
   var err = document.getElementById('input-error');
   var t = document.getElementById('transcript-input').value.trim();
   if (inputMode==='audio' && !uploadedFile) { err.classList.add('show'); return; }
   if (inputMode==='text' && !t) { err.classList.add('show'); return; }
   if (inputMode==='pdf' && !uploadedPDFBase64) { err.classList.add('show'); err.textContent='Please wait for the PDF to load.'; return; }
   err.classList.remove('show');
-  document.getElementById('pricing-wall').classList.remove('show');
   setStep(2);
   document.getElementById('phase1').style.display='none';
   document.getElementById('phase2').style.display='block';
