@@ -14,24 +14,44 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // Auth check
+  const { messages, guest } = req.body;
+  if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'Invalid request.' });
+
+  // ── Guest mode: one free analysis, no auth needed ──────────────────────
+  if (guest) {
+    try {
+      const response = await client.messages.create({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 8000,
+        system: SYSTEM_PROMPT,
+        messages
+      });
+      const raw = response.content
+        .filter(b => b.type === 'text').map(b => b.text).join('')
+        .replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
+      const parsed = JSON.parse(raw);
+      return res.status(200).json({ result: parsed });
+    } catch(e) {
+      console.error('Guest analysis error:', e);
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
+  // ── Logged-in users ────────────────────────────────────────────────────
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token) return res.status(401).json({ error: 'Please log in to run an analysis.' });
 
   const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
   if (authErr || !user) return res.status(401).json({ error: 'Session expired. Please log in again.' });
 
-  // Credits check
   const { data: profile } = await supabase
-    .from('profiles').select('credits').eq('id', user.id).single();
+    .from('profiles').select('credits, plan').eq('id', user.id).single();
   const credits = profile?.credits ?? 0;
+  const plan = profile?.plan ?? 'free';
 
-  if (credits <= 0) {
+  if (plan !== 'pro' && credits <= 0) {
     return res.status(402).json({ error: 'no_credits', credits: 0 });
   }
-
-  const { messages } = req.body;
-  if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'Invalid request.' });
 
   try {
     const response = await client.messages.create({
@@ -43,15 +63,17 @@ export default async function handler(req, res) {
 
     const raw = response.content
       .filter(b => b.type === 'text').map(b => b.text).join('')
-      .replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+      .replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
 
     const parsed = JSON.parse(raw);
 
-    // Deduct 1 credit
-    const newCredits = credits - 1;
-    await supabase.from('profiles').update({ credits: newCredits }).eq('id', user.id);
+    // Deduct 1 credit for non-pro users
+    const newCredits = plan === 'pro' ? credits : credits - 1;
+    if (plan !== 'pro') {
+      await supabase.from('profiles').update({ credits: newCredits }).eq('id', user.id);
+    }
 
-    return res.status(200).json({ result: parsed, credits: newCredits });
+    return res.status(200).json({ result: parsed, credits: newCredits, plan });
   } catch(e) {
     console.error('Analysis error:', e);
     return res.status(500).json({ error: e.message });
