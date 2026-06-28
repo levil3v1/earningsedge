@@ -25,28 +25,50 @@ export default async function handler(req, res) {
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch(e) {
-    console.error('Webhook signature failed:', e.message);
     return res.status(400).json({ error: 'Invalid signature' });
   }
 
+  const session = event.data.object;
+
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
     const userId = session.metadata?.user_id;
-    if (!userId) return res.status(400).json({ error: 'No user_id in metadata' });
+    const plan = session.metadata?.plan || 'starter';
+    if (!userId) return res.status(400).json({ error: 'No user_id' });
 
-    // Add 20 credits to user
+    const subscriptionId = session.subscription;
+    const credits = plan === 'pro' ? 999999 : 20;
+
+    await supabase.from('profiles').update({
+      plan,
+      credits,
+      stripe_customer_id: session.customer,
+      stripe_subscription_id: subscriptionId,
+      plan_reset_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+    }).eq('id', userId);
+  }
+
+  if (event.type === 'invoice.paid') {
+    // Monthly renewal — reset credits
+    const customerId = session.customer;
     const { data: profile } = await supabase
-      .from('profiles').select('credits').eq('id', userId).single();
-    const newCredits = (profile?.credits || 0) + 20;
-    await supabase.from('profiles').update({ credits: newCredits }).eq('id', userId);
+      .from('profiles').select('plan').eq('stripe_customer_id', customerId).single();
+    if (profile) {
+      const credits = profile.plan === 'pro' ? 999999 : 20;
+      await supabase.from('profiles').update({
+        credits,
+        plan_reset_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+      }).eq('stripe_customer_id', customerId);
+    }
+  }
 
-    // Log the purchase
-    await supabase.from('purchases').insert({
-      user_id: userId,
-      stripe_session_id: session.id,
-      credits_added: 20,
-      amount_paid: session.amount_total
-    });
+  if (event.type === 'customer.subscription.deleted') {
+    // Subscription cancelled — downgrade to free
+    const customerId = session.customer;
+    await supabase.from('profiles').update({
+      plan: 'free',
+      credits: 0,
+      stripe_subscription_id: null
+    }).eq('stripe_customer_id', customerId);
   }
 
   return res.status(200).json({ received: true });
