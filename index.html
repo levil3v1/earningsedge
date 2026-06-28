@@ -691,9 +691,6 @@ function setLoadingStep(si) {
 }
 
 async function runAnalysis() {
-  if (!guestMode && currentSession && profileLoaded && currentPlan !== 'pro' && currentCredits <= 0) {
-    showScreen('screen-pricing'); return;
-  }
   var btn=document.getElementById('run-btn'), apiErr=document.getElementById('api-error');
   apiErr.classList.remove('show');
   var company=document.getElementById('q-company').value.trim()||'Unknown Company';
@@ -803,9 +800,6 @@ function resetAppPhases() {
 }
 
 function newAnalysis() {
-  if (!guestMode && currentSession && currentPlan !== 'pro' && currentCredits <= 0) {
-    showScreen('screen-pricing'); return;
-  }
   resetAppPhases();
 }
 </script>
