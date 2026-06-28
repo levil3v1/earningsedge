@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EarningsEdge — Institutional Earnings Analysis</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@base/base-js@2"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -209,6 +209,9 @@
       <button class="btn-secondary" onclick="openAuth('login')">Log In</button>
     </div>
     <div class="auth-wall-note">3 free analyses included. No credit card required.</div>
+    <div style="margin-top: 24px;">
+      <button style="background:none;border:none;font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline;" onclick="tryWithoutAccount()">Try one analysis without an account →</button>
+    </div>
   </div>
 
   <!-- APP -->
@@ -404,6 +407,7 @@ var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 var currentSession = null, currentCredits = 0, currentPlan = 'free';
 var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
+var guestMode = false, guestUsed = false;
 
 window.addEventListener('load', async function() {
   var result = await sb.auth.getSession();
@@ -621,7 +625,7 @@ function setLoadingStep(si) {
 }
 
 async function runAnalysis() {
-  if (currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
+  if (!guestMode && currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
   var btn=document.getElementById('run-btn'), apiErr=document.getElementById('api-error');
   apiErr.classList.remove('show');
   var company=document.getElementById('q-company').value.trim()||'Unknown Company';
@@ -648,18 +652,23 @@ async function runAnalysis() {
     messages=[{role:'user',content:ctx+'\n\n'+schema+'\n\nEARNINGS CALL:\n'+callContent.slice(0,9000)}];
   }
   try {
+    var headers = { 'Content-Type': 'application/json' };
+    if (!guestMode && currentSession) headers['Authorization'] = 'Bearer ' + currentSession.access_token;
     var res = await fetch('/api/analyze', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
-      body: JSON.stringify({ messages: messages })
+      headers: headers,
+      body: JSON.stringify({ messages: messages, guest: guestMode })
     });
     clearInterval(stepInt);
     var data = await res.json();
     if (res.status === 402) { showPricing(); document.getElementById('phase3').classList.remove('show'); document.getElementById('phase1').style.display='block'; setStep(1); btn.disabled=false; btn.textContent='Run Analysis →'; return; }
     if (!res.ok) throw new Error(data.error || 'HTTP '+res.status);
-    updateCreditsBar(data.credits, data.plan);
+    if (!guestMode) updateCreditsBar(data.credits, data.plan);
     setLoadingStep(5);
-    setTimeout(function(){ renderReport(data.result); }, 400);
+    setTimeout(function(){
+      renderReport(data.result);
+      if (guestMode) { guestUsed = true; guestMode = false; showSignupPrompt(); }
+    }, 400);
   } catch(e) {
     clearInterval(stepInt);
     document.getElementById('phase3').classList.remove('show');
@@ -668,6 +677,19 @@ async function runAnalysis() {
     setStep(2);
     apiErr.textContent='Error: '+e.message; apiErr.classList.add('show');
   }
+}
+
+function showSignupPrompt() {
+  var banner = document.createElement('div');
+  banner.id = 'signup-banner';
+  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:var(--ink);color:#fff;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;z-index:50;';
+  banner.innerHTML = '<div><div style="font-family:\'Playfair Display\',serif;font-size:16px;font-weight:700;margin-bottom:4px;">Liked what you saw?</div><div style="font-size:12px;color:#aaa;">Create a free account to get 3 more analyses — no credit card needed.</div></div><div style="display:flex;gap:10px;flex-shrink:0;"><button onclick="dismissBanner()" style="background:transparent;color:#aaa;border:1px solid #444;padding:10px 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Maybe later</button><button onclick="openAuth(\'signup\');dismissBanner()" style="background:#c9a84c;color:#000;border:none;padding:10px 20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:\'Inter\',sans-serif;">Create Free Account</button></div>';
+  document.body.appendChild(banner);
+}
+
+function dismissBanner() {
+  var b = document.getElementById('signup-banner');
+  if (b) b.remove();
 }
 
 function scoreColor(v){ return v>=70?'var(--green)':v>=40?'var(--gold)':'var(--red)'; }
