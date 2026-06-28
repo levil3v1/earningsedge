@@ -15,8 +15,6 @@
     --green: #1a5c3a; --green-bg: #eaf3ee; --red: #8b1c1c; --red-bg: #faeaea;
   }
   body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
-
-  /* HEADER */
   .header { background: var(--ink); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
   .logo { display: flex; align-items: baseline; gap: 2px; }
   .logo-main { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; }
@@ -27,15 +25,13 @@
   .header-btn { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 6px 14px; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
   .header-btn-ghost { background: transparent; color: #c9a84c; border: 1px solid #c9a84c44; }
   .header-btn-solid { background: #c9a84c; color: #000; }
-  .header-btn-solid:hover { background: #b8963e; }
-
   .main { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
 
   /* AUTH WALL */
   .auth-wall { display: none; min-height: 80vh; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 60px 20px; }
   .auth-wall.show { display: flex; }
   .auth-wall-icon { font-size: 40px; margin-bottom: 20px; }
-  .auth-wall-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.2; }
+  .auth-wall-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
   .auth-wall-sub { font-size: 14px; color: var(--ink3); max-width: 420px; margin: 0 auto 36px; line-height: 1.7; }
   .auth-wall-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
   .auth-wall-note { font-size: 11px; color: var(--muted); }
@@ -45,7 +41,6 @@
   .modal-overlay.show { display: flex; }
   .modal { background: var(--paper); max-width: 440px; width: calc(100% - 40px); padding: 40px; position: relative; }
   .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
-  .modal-close:hover { color: var(--ink); }
   .modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
   .modal-sub { font-size: 12px; color: var(--ink3); margin-bottom: 28px; }
   .modal-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
@@ -62,31 +57,41 @@
   .modal-ok { background: var(--green-bg); border-left: 3px solid var(--green); padding: 10px 14px; font-size: 12px; color: var(--green); margin-top: 12px; display: none; }
   .modal-ok.show { display: block; }
 
-  /* PAYWALL */
-  .paywall { display: none; background: var(--paper); border: 1px solid var(--rule); padding: 48px 32px; text-align: center; margin-bottom: 28px; }
-  .paywall.show { display: block; }
-  .paywall-icon { font-size: 36px; margin-bottom: 16px; }
-  .paywall-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
-  .paywall-sub { font-size: 13px; color: var(--ink3); line-height: 1.7; margin-bottom: 28px; max-width: 440px; margin-left: auto; margin-right: auto; }
-  .paywall-price { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
-  .paywall-price-sub { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 28px; }
-  .paywall-features { list-style: none; display: flex; flex-direction: column; gap: 10px; max-width: 280px; margin: 0 auto 32px; text-align: left; }
-  .paywall-features li { font-size: 13px; color: var(--ink2); display: flex; align-items: center; gap: 10px; }
-  .paywall-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
-  .paywall-btn { background: var(--ink); color: #fff; border: none; padding: 15px 40px; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
-  .paywall-btn:hover { background: var(--ink2); }
-  .paywall-btn:disabled { background: var(--muted); cursor: not-allowed; }
-  .paywall-secure { font-size: 11px; color: var(--muted); margin-top: 14px; }
+  /* PRICING */
+  .pricing-wall { display: none; padding: 40px 0; }
+  .pricing-wall.show { display: block; }
+  .pricing-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 8px; }
+  .pricing-sub { font-size: 13px; color: var(--ink3); text-align: center; margin-bottom: 36px; }
+  .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 640px; margin: 0 auto 24px; }
+  .pricing-card { background: var(--paper); border: 1px solid var(--rule); padding: 32px 28px; position: relative; }
+  .pricing-card.featured { border-color: var(--ink); border-width: 2px; }
+  .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; padding: 4px 14px; white-space: nowrap; }
+  .pricing-plan { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--gold); margin-bottom: 12px; }
+  .pricing-price { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .pricing-period { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
+  .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .pricing-features li { font-size: 12px; color: var(--ink2); display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+  .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .pricing-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 13px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .pricing-btn:hover { background: var(--ink2); }
+  .pricing-btn:disabled { background: var(--muted); cursor: not-allowed; }
+  .pricing-btn.outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+  .pricing-btn.outline:hover { background: var(--ink); color: #fff; }
+  .pricing-secure { text-align: center; font-size: 11px; color: var(--muted); }
 
   /* CREDITS BAR */
   .credits-bar { display: flex; align-items: center; justify-content: space-between; background: var(--paper); border: 1px solid var(--rule); padding: 12px 18px; margin-bottom: 28px; }
   .credits-left { font-size: 12px; color: var(--ink3); }
   .credits-left strong { color: var(--ink); font-size: 15px; }
+  .credits-plan { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; padding: 3px 10px; margin-left: 8px; }
+  .credits-plan.free { background: var(--rule-light); color: var(--muted); }
+  .credits-plan.starter { background: var(--gold-bg); color: var(--gold); }
+  .credits-plan.pro { background: var(--ink); color: #fff; }
   .credits-track { flex: 1; height: 3px; background: var(--rule-light); margin: 0 20px; }
   .credits-fill { height: 100%; background: var(--green); transition: width 0.4s ease; }
   .credits-fill.warn { background: var(--gold); }
   .credits-fill.low { background: var(--red); }
-  .credits-buy { font-size: 11px; color: var(--gold); cursor: pointer; text-decoration: underline; font-weight: 600; white-space: nowrap; border: none; background: none; font-family: 'Inter', sans-serif; }
+  .credits-upgrade { font-size: 11px; color: var(--gold); cursor: pointer; text-decoration: underline; font-weight: 600; white-space: nowrap; border: none; background: none; font-family: 'Inter', sans-serif; }
 
   /* STEPS */
   .stepbar { display: flex; align-items: center; margin-bottom: 40px; border-bottom: 1px solid var(--rule); padding-bottom: 16px; }
@@ -96,8 +101,6 @@
   .sb-num { width: 20px; height: 20px; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
   .sb-item.done .sb-num { background: var(--gold); border-color: var(--gold); color: #fff; font-size: 9px; }
   .sb-line { flex: 1; height: 1px; background: var(--rule); margin: 0 16px; }
-
-  /* FORM */
   .sec-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 6px; }
   .sec-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1.2; }
   .sec-sub { font-size: 13px; color: var(--ink3); margin-top: 8px; }
@@ -131,8 +134,6 @@
   .btn-row { display: flex; gap: 12px; align-items: center; margin-top: 32px; flex-wrap: wrap; }
   .err { background: var(--red-bg); border-left: 3px solid var(--red); padding: 12px 16px; font-size: 12px; color: var(--red); margin-top: 16px; display: none; line-height: 1.5; }
   .err.show { display: block; }
-
-  /* LOADING */
   .loading { display: none; padding: 80px 20px; text-align: center; }
   .loading.show { display: block; }
   .loading-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 16px; }
@@ -146,8 +147,6 @@
   .l-marker { width: 5px; height: 5px; border: 1px solid currentColor; flex-shrink: 0; }
   .l-step.done .l-marker { background: var(--green); border-color: var(--green); }
   .l-step.active .l-marker { background: var(--gold); border-color: var(--gold); }
-
-  /* REPORT */
   .report { display: none; }
   .report.show { display: block; }
   .report-masthead { border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 24px 0 20px; margin-bottom: 32px; }
@@ -212,7 +211,7 @@
     <div class="auth-wall-note">3 free analyses included. No credit card required.</div>
   </div>
 
-  <!-- APP (hidden until logged in) -->
+  <!-- APP -->
   <div id="app" style="display:none">
 
     <div class="stepbar" id="stepbar">
@@ -227,27 +226,48 @@
 
     <!-- CREDITS BAR -->
     <div class="credits-bar" id="credits-bar" style="display:none">
-      <div class="credits-left"><strong id="credits-count">0</strong> analyses remaining</div>
+      <div class="credits-left">
+        <strong id="credits-count">0</strong> analyses remaining
+        <span class="credits-plan free" id="credits-plan-badge">Free</span>
+      </div>
       <div class="credits-track"><div class="credits-fill" id="credits-fill" style="width:0%"></div></div>
-      <button class="credits-buy" onclick="showPaywall()">Buy 20 more — $9.99</button>
+      <button class="credits-upgrade" onclick="showPricing()">Upgrade →</button>
     </div>
 
-    <!-- PAYWALL -->
-    <div class="paywall" id="paywall">
-      <div class="paywall-icon">📊</div>
-      <div class="paywall-title">You've used all your analyses</div>
-      <div class="paywall-sub">Top up your account to keep going. Every credit is one full institutional-grade earnings call report.</div>
-      <div class="paywall-price">$9.99</div>
-      <div class="paywall-price-sub">One-time · 20 analyses</div>
-      <ul class="paywall-features">
-        <li>20 full analysis credits</li>
-        <li>PDF &amp; audio transcripts</li>
-        <li>Bull / bear case breakdown</li>
-        <li>Management tone scoring</li>
-        <li>Credits never expire</li>
-      </ul>
-      <button class="paywall-btn" id="checkout-btn" onclick="startCheckout()">Buy 20 Analyses — $9.99</button>
-      <div class="paywall-secure">🔒 Secure payment via Stripe</div>
+    <!-- PRICING WALL -->
+    <div class="pricing-wall" id="pricing-wall">
+      <div class="pricing-title">Upgrade your plan</div>
+      <div class="pricing-sub">Choose the plan that fits how often you analyse earnings calls.</div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-plan">Starter</div>
+          <div class="pricing-price">$9.99</div>
+          <div class="pricing-period">per month</div>
+          <ul class="pricing-features">
+            <li>20 analyses per month</li>
+            <li>Full institutional report</li>
+            <li>Bull / bear breakdown</li>
+            <li>Tone & credibility scoring</li>
+            <li>Risk flag detection</li>
+          </ul>
+          <button class="pricing-btn outline" onclick="startCheckout('starter')">Get Starter</button>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-plan">Pro</div>
+          <div class="pricing-price">$19.99</div>
+          <div class="pricing-period">per month</div>
+          <ul class="pricing-features">
+            <li>Unlimited analyses</li>
+            <li>Full institutional report</li>
+            <li>Bull / bear breakdown</li>
+            <li>Tone & credibility scoring</li>
+            <li>Risk flag detection</li>
+          </ul>
+          <button class="pricing-btn" onclick="startCheckout('pro')">Get Pro</button>
+        </div>
+      </div>
+      <div class="pricing-secure">🔒 Secure payment via Stripe · Cancel anytime</div>
     </div>
 
     <!-- PHASE 1 -->
@@ -353,7 +373,7 @@
       </div>
     </div>
 
-  </div><!-- /app -->
+  </div>
 </div>
 
 <!-- AUTH MODAL -->
@@ -382,7 +402,8 @@ var SUPABASE_URL = 'https://rdvguldkjjjmxphpxoov.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkdmd1bGRrampqbXhwaHB4b292Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODQ2NTIsImV4cCI6MjA5ODE2MDY1Mn0.-EeCJ2pYYNtuKDJ0KraPVjyCFeptWj7h5jGL7hhrQNE';
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-var currentSession = null, currentCredits = 0, inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
+var currentSession = null, currentCredits = 0, currentPlan = 'free';
+var inputMode = 'audio', uploadedFile = null, uploadedPDFBase64 = '', currentReport = null;
 
 window.addEventListener('load', async function() {
   var result = await sb.auth.getSession();
@@ -395,12 +416,11 @@ window.addEventListener('load', async function() {
     if (event === 'SIGNED_IN' && session) await setSession(session);
     if (event === 'SIGNED_OUT') showWall();
   });
-
   var params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
     setTimeout(async function() {
       await refreshProfile();
-      alert('Payment successful! 20 analyses have been added to your account.');
+      alert('Payment successful! Your plan has been activated.');
       window.history.replaceState({}, '', '/');
     }, 2000);
   }
@@ -432,30 +452,31 @@ async function refreshProfile() {
     body: JSON.stringify({ action: 'profile' })
   });
   var data = await res.json();
-  if (data.profile) updateCreditsBar(data.profile.credits);
+  if (data.profile) updateCreditsBar(data.profile.credits, data.profile.plan);
 }
 
-function updateCreditsBar(credits) {
+function updateCreditsBar(credits, plan) {
   currentCredits = credits;
+  currentPlan = plan || 'free';
   var bar = document.getElementById('credits-bar');
   var count = document.getElementById('credits-count');
   var fill = document.getElementById('credits-fill');
-  var paywall = document.getElementById('paywall');
+  var badge = document.getElementById('credits-plan-badge');
   bar.style.display = 'flex';
-  count.textContent = credits;
-  var pct = Math.min(100, (credits / 20) * 100);
+  var isPro = currentPlan === 'pro';
+  count.textContent = isPro ? '∞' : credits;
+  badge.textContent = currentPlan === 'pro' ? 'Pro' : currentPlan === 'starter' ? 'Starter' : 'Free';
+  badge.className = 'credits-plan ' + currentPlan;
+  var pct = isPro ? 100 : Math.min(100, (credits / 20) * 100);
   fill.style.width = pct + '%';
-  fill.className = 'credits-fill' + (credits <= 1 ? ' low' : credits <= 5 ? ' warn' : '');
-  if (credits <= 0) paywall.classList.add('show');
-  else paywall.classList.remove('show');
+  fill.className = 'credits-fill' + (!isPro && credits <= 1 ? ' low' : !isPro && credits <= 5 ? ' warn' : '');
+  if (!isPro && credits <= 0) showPricing();
 }
 
-async function logout() {
-  await sb.auth.signOut();
-  showWall();
-}
+function showPricing() { document.getElementById('pricing-wall').classList.add('show'); }
+function hidePricing() { document.getElementById('pricing-wall').classList.remove('show'); }
 
-function showPaywall() { document.getElementById('paywall').classList.add('show'); }
+async function logout() { await sb.auth.signOut(); showWall(); }
 
 // AUTH MODAL
 var authMode = 'login';
@@ -473,7 +494,6 @@ function openAuth(mode) {
   document.getElementById('auth-email').value = '';
   document.getElementById('auth-password').value = '';
 }
-
 function closeAuth() { document.getElementById('auth-modal').classList.remove('show'); }
 document.getElementById('auth-modal').addEventListener('click', function(e) { if (e.target === this) closeAuth(); });
 
@@ -495,7 +515,6 @@ async function submitAuth() {
     } else {
       var res = await sb.auth.signInWithPassword({ email: email, password: password });
       if (res.error) throw res.error;
-      // setSession called via onAuthStateChange
     }
   } catch(e) {
     errEl.textContent = e.message; errEl.classList.add('show');
@@ -504,21 +523,22 @@ async function submitAuth() {
 }
 
 // CHECKOUT
-async function startCheckout() {
+async function startCheckout(plan) {
   if (!currentSession) { openAuth('login'); return; }
-  var btn = document.getElementById('checkout-btn');
-  btn.disabled = true; btn.textContent = 'Redirecting to Stripe…';
+  var btn = document.querySelector('.pricing-btn[onclick="startCheckout(\'' + plan + '\')"]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Redirecting…'; }
   try {
     var res = await fetch('/api/checkout', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token }
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
+      body: JSON.stringify({ plan: plan })
     });
     var data = await res.json();
     if (data.url) window.location.href = data.url;
     else throw new Error(data.error || 'Checkout failed');
   } catch(e) {
     alert('Error: ' + e.message);
-    btn.disabled = false; btn.textContent = 'Buy 20 Analyses — $9.99';
+    if (btn) { btn.disabled = false; btn.textContent = plan === 'pro' ? 'Get Pro' : 'Get Starter'; }
   }
 }
 
@@ -565,13 +585,14 @@ function handlePDF(inp) {
 });
 
 function goToBriefing() {
-  if (currentCredits <= 0) { showPaywall(); return; }
+  if (currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
   var err = document.getElementById('input-error');
   var t = document.getElementById('transcript-input').value.trim();
   if (inputMode==='audio' && !uploadedFile) { err.classList.add('show'); return; }
   if (inputMode==='text' && !t) { err.classList.add('show'); return; }
   if (inputMode==='pdf' && !uploadedPDFBase64) { err.classList.add('show'); err.textContent='Please wait for the PDF to load.'; return; }
   err.classList.remove('show');
+  hidePricing();
   setStep(2);
   document.getElementById('phase1').style.display='none';
   document.getElementById('phase2').style.display='block';
@@ -600,7 +621,7 @@ function setLoadingStep(si) {
 }
 
 async function runAnalysis() {
-  if (currentCredits <= 0) { showPaywall(); return; }
+  if (currentPlan !== 'pro' && currentCredits <= 0) { showPricing(); return; }
   var btn=document.getElementById('run-btn'), apiErr=document.getElementById('api-error');
   apiErr.classList.remove('show');
   var company=document.getElementById('q-company').value.trim()||'Unknown Company';
@@ -634,9 +655,9 @@ async function runAnalysis() {
     });
     clearInterval(stepInt);
     var data = await res.json();
-    if (res.status === 402) { showPaywall(); document.getElementById('phase3').classList.remove('show'); document.getElementById('phase1').style.display='block'; setStep(1); btn.disabled=false; btn.textContent='Run Analysis →'; return; }
+    if (res.status === 402) { showPricing(); document.getElementById('phase3').classList.remove('show'); document.getElementById('phase1').style.display='block'; setStep(1); btn.disabled=false; btn.textContent='Run Analysis →'; return; }
     if (!res.ok) throw new Error(data.error || 'HTTP '+res.status);
-    updateCreditsBar(data.credits);
+    updateCreditsBar(data.credits, data.plan);
     setLoadingStep(5);
     setTimeout(function(){ renderReport(data.result); }, 400);
   } catch(e) {
